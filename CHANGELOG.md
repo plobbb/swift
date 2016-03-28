@@ -1651,7 +1651,7 @@ Swift 2.2
   // Swift
   @objc
   enum Bear: Int {
-     case Black, Grizzly, Polar
+    case Black, Grizzly, Polar
   }
   ```
 
@@ -1660,7 +1660,7 @@ Swift 2.2
   ```objc
   // Objective-C
   typedef NS_ENUM(NSInteger, Bear) {
-     BearBlack, BearGrizzly, BearPolar
+    BearBlack, BearGrizzly, BearPolar
   };
   ```
 
@@ -1721,9 +1721,9 @@ Swift 2.2
 
   ```swift
   func autoreleasepool(@noescape code: () -> ()) {
-     pushAutoreleasePool()
-     code()
-     popAutoreleasePool()
+    pushAutoreleasePool()
+    code()
+    popAutoreleasePool()
   }
   ```
 
@@ -1805,26 +1805,26 @@ Swift 2.2
 * Class methods and initializers that satisfy protocol requirements now properly
   invoke subclass overrides when called in generic contexts. For example:
 
-    ```swift
-    protocol P {
-      class func foo()
-    }
+  ```swift
+  protocol P {
+    class func foo()
+  }
 
-    class C: P {
-      class func foo() { println("C!") }
-    }
+  class C: P {
+    class func foo() { println("C!") }
+  }
 
-    class D: C {
-      override class func foo() { println("D!") }
-    }
+  class D: C {
+    override class func foo() { println("D!") }
+  }
 
-    func foo<T: P>(x: T) {
-      x.dynamicType.foo()
-    }
+  func foo<T: P>(x: T) {
+    x.dynamicType.foo()
+  }
 
-    foo(C()) // Prints "C!"
-    foo(D()) // Used to incorrectly print "C!", now prints "D!"
-    ```
+  foo(C()) // Prints "C!"
+  foo(D()) // Used to incorrectly print "C!", now prints "D!"
+  ```
 
   **(18828217)**
 
@@ -1886,11 +1886,11 @@ Swift 2.2
   stringWithContentsOfFile:encoding:error:]`, will now be imported as
   (failable) initializers, e.g.,
 
-    ```swift
-    init?(contentsOfFile path: String,
-          encoding: NSStringEncoding,
-          error: NSErrorPointer)
-    ```
+  ```swift
+  init?(contentsOfFile path: String,
+        encoding: NSStringEncoding,
+        error: NSErrorPointer)
+  ```
 
 * Nested classes explicitly marked `@objc` will now properly be included in a
   target's generated header as long as the containing context is also
@@ -1904,9 +1904,10 @@ Swift 2.2
   `convertFrom`. For example, `IntegerLiteralConvertible` now has the
   following initializer requirement:
 
-    ```swift
-    init(integerLiteral value: IntegerLiteralType)
-    ```
+  ```swift
+  init(integerLiteral value: IntegerLiteralType)
+  ```
+
   Any type that previously conformed to one of these protocols will
   need to replace its `convertFromXXX` static methods with the
   corresponding initializer.
@@ -1919,30 +1920,30 @@ Swift 2.2
   an implicitly-unwrapped optional). For example, you could implement
   `String.toInt` as a failable initializer of `Int` like this:
 
-    ```swift
-    extension Int {
-      init?(fromString: String) {
-        if let i = fromString.toInt() {
-          // Initialize
-          self = i
-        } else {
-          // Discard self and return 'nil'.
-          return nil
-        }
+  ```swift
+  extension Int {
+    init?(fromString: String) {
+      if let i = fromString.toInt() {
+        // Initialize
+        self = i
+      } else {
+        // Discard self and return 'nil'.
+        return nil
       }
     }
-    ```
+  }
+  ```
 
   The result of constructing a value using a failable initializer then becomes
   optional:
 
-    ```swift
-    if let twentytwo = Int(fromString: "22") {
-      println("the number is \(twentytwo)")
-    } else {
-      println("not a number")
-    }
-    ```
+  ```swift
+  if let twentytwo = Int(fromString: "22") {
+    println("the number is \(twentytwo)")
+  } else {
+    println("not a number")
+  }
+  ```
 
   In the current implementation, struct and enum initializers can return `nil`
   at any point inside the initializer, but class initializers can only return
@@ -1958,11 +1959,11 @@ Swift 2.2
   `init?(rawValue: RawValue)`, and the `toRaw()` method has been replaced with
   a `rawValue` property. Enums with raw types can now be used like this:
 
-    ```swift
-    enum Foo: Int { case A = 0, B = 1, C = 2 }
-    let foo = Foo(rawValue: 2)! // formerly 'Foo.fromRaw(2)!'
-    println(foo.rawValue)  // formerly 'foo.toRaw()'
-    ```
+  ```swift
+  enum Foo: Int { case A = 0, B = 1, C = 2 }
+  let foo = Foo(rawValue: 2)! // formerly 'Foo.fromRaw(2)!'
+  println(foo.rawValue)  // formerly 'foo.toRaw()'
+  ```
 
 2014-09-02
 ----------
@@ -1996,31 +1997,31 @@ Swift 2.2
   value is returned as a non-optional; otherwise, the expression on the right
   is evaluated and returned:
 
-    ```swift
-    var sequence: [Int] = []
-    sequence.first ?? 0 // produces 0, because sequence.first is nil
-    sequence.append(22)
-    sequence.first ?? 0 // produces 22, the value of sequence.first
-    ```
+  ```swift
+  var sequence: [Int] = []
+  sequence.first ?? 0 // produces 0, because sequence.first is nil
+  sequence.append(22)
+  sequence.first ?? 0 // produces 22, the value of sequence.first
+  ```
 
 * The optional chaining `?` operator can now be mutated through, like `!`.
   The assignment and the evaluation of the right-hand side of the operator
   are conditional on the presence of the optional value:
 
-    ```swift
-    var sequences = ["fibonacci": [1, 1, 2, 3, 4], "perfect": [6, 28, 496]]
-    sequences["fibonacci"]?[4]++ // Increments element 4 of key "fibonacci"
-    sequences["perfect"]?.append(8128) // Appends to key "perfect"
+  ```swift
+  var sequences = ["fibonacci": [1, 1, 2, 3, 4], "perfect": [6, 28, 496]]
+  sequences["fibonacci"]?[4]++ // Increments element 4 of key "fibonacci"
+  sequences["perfect"]?.append(8128) // Appends to key "perfect"
 
-    sequences["cubes"]?[3] = 3*3*3 // Does nothing; no "cubes" key
-    ```
+  sequences["cubes"]?[3] = 3*3*3 // Does nothing; no "cubes" key
+  ```
 
   Note that optional chaining still flows to the right, so prefix increment
   operators are *not* included in the chain, so this won't type-check:
 
-    ```swift
-    ++sequences["fibonacci"]?[4] // Won't type check, can't '++' Int?
-    ```
+  ```swift
+  ++sequences["fibonacci"]?[4] // Won't type check, can't '++' Int?
+  ```
 
 2014-07-28
 ----------
@@ -2042,30 +2043,30 @@ Swift 2.2
   `reinterpretCast` has been renamed `unsafeBitCast`, and it has acquired
   a (required) explicit type parameter.  So
 
-    ```swift
-    let x: T = reinterpretCast(y)
-    ```
+  ```swift
+  let x: T = reinterpretCast(y)
+  ```
 
   becomes
 
-    ```swift
-    let x = unsafeBitCast(y, T.self)
-    ```
+  ```swift
+  let x = unsafeBitCast(y, T.self)
+  ```
 
 * Because their semantics were unclear, the methods `asUnsigned` (on
   the signed integer types) and `asSigned` (on the unsigned integer
   types) have been replaced.  The new idiom is explicit construction
   of the target type using the `bitPattern:` argument label.  So,
 
-    ```swift
-    myInt.asUnsigned()
-    ```
+  ```swift
+  myInt.asUnsigned()
+  ```
 
   has become
 
-    ```swift
-    UInt(bitPattern: myInt)
-    ```
+  ```swift
+  UInt(bitPattern: myInt)
+  ```
 
 * To better follow Cocoa naming conventions and to encourage
   immutability, The following pointer types were renamed:
@@ -2084,16 +2085,16 @@ Swift 2.2
 * The optional unwrapping operator `x!` can now be assigned through, and
   mutating methods and operators can be applied through it:
 
-    ```swift
-    var x: Int! = 0
-    x! = 2
-    x!++
+  ```swift
+  var x: Int! = 0
+  x! = 2
+  x!++
 
-    // Nested dictionaries can now be mutated directly:
-    var sequences = ["fibonacci": [1, 1, 2, 3, 0]]
-    sequences["fibonacci"]![4] = 5
-    sequences["fibonacci"]!.append(8)
-    ```
+  // Nested dictionaries can now be mutated directly:
+  var sequences = ["fibonacci": [1, 1, 2, 3, 0]]
+  sequences["fibonacci"]![4] = 5
+  sequences["fibonacci"]!.append(8)
+  ```
 
 * The `@auto_closure` attribute has been renamed to `@autoclosure`.
 
@@ -2106,28 +2107,28 @@ Swift 2.2
   only makes a declaration visible to Objective-C; the compiler may now use
   vtable lookup or direct access to access (non-dynamic) `@objc` declarations.
 
-    ```swift
-    class Foo {
-      // Always accessed by objc_msgSend
-      dynamic var x: Int
+  ```swift
+  class Foo {
+    // Always accessed by objc_msgSend
+    dynamic var x: Int
 
-      // Accessed by objc_msgSend from ObjC; may be accessed by vtable
-      // or by static reference in Swift
-      @objc var y: Int
+    // Accessed by objc_msgSend from ObjC; may be accessed by vtable
+    // or by static reference in Swift
+    @objc var y: Int
 
-      // Not exposed to ObjC (unless Foo inherits NSObject)
-      var z: Int
-    }
-    ```
+    // Not exposed to ObjC (unless Foo inherits NSObject)
+    var z: Int
+  }
+  ```
 
   `dynamic` enables KVO, proxying, and other advanced Cocoa features to work
   reliably with Swift declarations.
 
 * Clang submodules can now be imported:
 
-    ```swift
-    import UIKit.UIGestureRecognizerSubclass
-    ```
+  ```swift
+  import UIKit.UIGestureRecognizerSubclass
+  ```
 
 * The numeric optimization levels `-O[0-3]` have been removed in favor of the
   named levels `-Onone` and `-O`.
@@ -2140,15 +2141,15 @@ Swift 2.2
   overrides in the language consistently require the use of
   `override`. For example:
 
-    ```swift
-    class A {
-      init() { }
-    }
+  ```swift
+  class A {
+    init() { }
+  }
 
-    class B : A {
-      override init() { super.init() }
-    }
-    ```
+  class B : A {
+    override init() { super.init() }
+  }
+  ```
 
 * Required initializers are now more prominent in several ways. First,
   a (non-final) class that conforms to a protocol that contains an
@@ -2157,30 +2158,32 @@ Swift 2.2
   conform to the protocol, and will be most visible with classes that
   conform to `NSCoding`:
 
-    ```swift
-    class MyClass : NSObject, NSCoding {
-      required init(coder aDecoder: NSCoder!) { /*... */ }
-      func encodeWithCoder(aCoder: NSCoder!) { /* ... */ }
-    }
-    ```
+  ```swift
+  class MyClass : NSObject, NSCoding {
+    required init(coder aDecoder: NSCoder!) { /*... */ }
+    func encodeWithCoder(aCoder: NSCoder!) { /* ... */ }
+  }
+  ```
+
   Second, because `required` places a significant requirement on all
   subclasses, the `required` keyword must be placed on overrides of a
   required initializer:
 
-    ```swift
-    class MySubClass : MyClass {
-      var title: String = "Untitled"
+  ```swift
+  class MySubClass : MyClass {
+    var title: String = "Untitled"
 
-      required init(coder aDecoder: NSCoder!) { /*... */ }
-      override func encodeWithCoder(aCoder: NSCoder!) { /* ... */ }
-    }
-    ```
+    required init(coder aDecoder: NSCoder!) { /*... */ }
+    override func encodeWithCoder(aCoder: NSCoder!) { /* ... */ }
+  }
+  ```
+
   Finally, required initializers can now be inherited like any other
   initializer:
 
-    ```swift
-    class MySimpleSubClass : MyClass { } // inherits the required init(coder:).
-    ```
+  ```swift
+  class MySimpleSubClass : MyClass { } // inherits the required init(coder:).
+  ```
 
 2014-07-21
 ----------
@@ -2216,10 +2219,10 @@ Swift 2.2
   sequence along with the element pattern. For example, this accepts
   the following loops that were previously rejected:
 
-    ```swift
-    for i: Int8 in 0..<10 { }
-    for i: Float in 0.0...10.0 { }
-    ```
+  ```swift
+  for i: Int8 in 0..<10 { }
+  for i: Float in 0.0...10.0 { }
+  ```
 
 * Introduced the new `BooleanLiteralConvertible` protocol, which allows
   user-defined types to support Boolean literals. `true` and `false`
@@ -2256,16 +2259,16 @@ Swift 2.2
 * `Array` types are now spelled with the brackets surrounding the
   element type. For example, an array of `Int` is written as:
 
-    ```swift
-    var array: [Int]
-    ```
+  ```swift
+  var array: [Int]
+  ```
 
 * `Dictionary` types can now be spelled with the syntax `[K : V]`, where `K`
   is the key type and `V` is the value type. For example:
 
-    ```swift
-    var dict: [String : Int] = ["Hello" : 1, "World" : 2]
-    ```
+  ```swift
+  var dict: [String : Int] = ["Hello" : 1, "World" : 2]
+  ```
 
   The type `[K : V]` is syntactic sugar for `Dictionary<K, V>`; nothing
   else has changed.
@@ -2304,47 +2307,47 @@ Swift 2.2
 * `sort`, `map`, `filter`, and `reduce` methods on `Array`s accept trailing
   closures:
 
-    ```swift
-    let a = [5, 6, 1, 3, 9]
-    a.sort{ $0 > $1 }
-    println(a)                                 // [9, 6, 5, 3, 1]
-    println(a.map{ $0 * 2 })                   // [18, 12, 10, 6, 2]
-    println(a.map{ $0 * 2 }.filter{ $0 < 10})  // [6, 2]
-    println(a.reduce(1000){ $0 + $1 })         // 1024 (no kidding)
-    ```
+  ```swift
+  let a = [5, 6, 1, 3, 9]
+  a.sort{ $0 > $1 }
+  println(a)                                 // [9, 6, 5, 3, 1]
+  println(a.map{ $0 * 2 })                   // [18, 12, 10, 6, 2]
+  println(a.map{ $0 * 2 }.filter{ $0 < 10})  // [6, 2]
+  println(a.reduce(1000){ $0 + $1 })         // 1024 (no kidding)
+  ```
 
 * A lazy `map()` function in the standard library works on any `Sequence`.
   Example:
 
-    ```swift
-    class X {
-      var value: Int
+  ```swift
+  class X {
+    var value: Int
 
-      init(_ value: Int) {
-        self.value = value
-        println("created X(\(value))")
-      }
+    init(_ value: Int) {
+      self.value = value
+      println("created X(\(value))")
     }
+  }
 
-    // logically, this sequence is X(0), X(1), X(2), ... X(50)
-    let lazyXs = map(0..50){ X($0) }
+  // logically, this sequence is X(0), X(1), X(2), ... X(50)
+  let lazyXs = map(0..50){ X($0) }
 
-    // Prints "created X(...)" 4 times
-    for x in lazyXs {
-      if x.value == 4 {
-        break
-      }
+  // Prints "created X(...)" 4 times
+  for x in lazyXs {
+    if x.value == 4 {
+      break
     }
-    ```
+  }
+  ```
 
 * There's a similar lazy `filter()` function:
 
-    ```swift
-    // 0, 10, 20, 30, 40
-    let tens = filter(0..50) { $0 % 10 == 0 }
-    let tenX = map(tens){ X($0) }    // 5 lazy Xs
-    let tenXarray = Array(tenX)      // Actually creates those Xs
-    ```
+  ```swift
+  // 0, 10, 20, 30, 40
+  let tens = filter(0..50) { $0 % 10 == 0 }
+  let tenX = map(tens){ X($0) }    // 5 lazy Xs
+  let tenXarray = Array(tenX)      // Actually creates those Xs
+  ```
 
 * Weak pointers of classbound protocol type work now.
 
@@ -2355,23 +2358,23 @@ Swift 2.2
   array storing `AnyObject` values. For example, `NSView`'s constraints
   property
 
-    ```objc
-    @property (readonly) NSArray *constraints;
-    ```
+  ```objc
+  @property (readonly) NSArray *constraints;
+  ```
 
   is now imported as
 
-    ```swift
-    var constraints: AnyObject[]!
-    ```
+  ```swift
+  var constraints: AnyObject[]!
+  ```
 
   Note that one can implicitly convert between an `AnyObject[]` and an
   `NSArray` (in both directions), so (for example) one can still
   explicitly use `NSArray` if desired:
 
-    ```swift
-    var array: NSArray = view.constraints
-    ```
+  ```swift
+  var array: NSArray = view.constraints
+  ```
 
   Swift arrays bridge to `NSArray` similarly to the way Swift
   strings bridge to `NSString`.
@@ -2407,23 +2410,23 @@ Swift 2.2
 * The pound sign (`#`) is now used instead of the back-tick (\`) to mark
   an argument name as a keyword argument, e.g.,
 
-    ```swift
-    func moveTo(#x: Int, #y: Int) { ... }
-    moveTo(x: 5, y: 7)
-    ```
+  ```swift
+  func moveTo(#x: Int, #y: Int) { ... }
+  moveTo(x: 5, y: 7)
+  ```
 
 * Objective-C factory methods are now imported as initializers. For
   example, `NSColor`'s `+colorWithRed:green:blue:alpha` becomes
 
-    ```swift
-    init(red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat)
-    ```
+  ```swift
+  init(red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat)
+  ```
 
   which allows an `NSColor` to be created as, e.g.,
 
-    ```swift
-    NSColor(red: 0.5, green: 0.25, blue: 0.25, alpha: 0.5)
-    ```
+  ```swift
+  NSColor(red: 0.5, green: 0.25, blue: 0.25, alpha: 0.5)
+  ```
 
   Factory methods are identified by their kind (class methods), name
   (starts with words that match the words that end the class name),
@@ -2444,10 +2447,10 @@ Swift 2.2
   `UIApplicationDelegate` class. This will cause the `main` entry point to the
   application to be automatically generated as follows:
 
-    ```swift
-    UIApplicationMain(argc, argv, nil,
-                      NSStringFromClass(YourApplicationDelegate.self))
-    ```
+  ```swift
+  UIApplicationMain(argc, argv, nil,
+                    NSStringFromClass(YourApplicationDelegate.self))
+  ```
 
   If you need nontrivial logic in your application entry point, you can still
   write out a `main.swift`. Note that `@UIApplicationMain` and `main.swift` are
@@ -2459,9 +2462,9 @@ Swift 2.2
 * weak pointers now work with implicitly unchecked optionals, enabling usecases
   where you don't want to `!` every use of a weak pointer.  For example:
 
-     ```swift
-     weak var myView : NSView!
-     ```
+  ```swift
+  weak var myView : NSView!
+  ```
 
   of course, they still work with explicitly checked optionals like `NSView?`
 
@@ -2474,19 +2477,19 @@ Swift 2.2
   their initializer to be evaluated the first time the property is touched
   instead of when the enclosing type is initialized.  For example:
 
-    ```swift
-    func myInitializer() -> Int { println("hello\n"); return 42 }
-    class MyClass {
-      @lazy var aProperty = myInitializer()
-    }
+  ```swift
+  func myInitializer() -> Int { println("hello\n"); return 42 }
+  class MyClass {
+    @lazy var aProperty = myInitializer()
+  }
 
-    var c = MyClass()     // doesn't print hello
-    var tmp = c.aProperty // prints hello on first access
-    tmp = c.aProperty     // doesn't print on subsequent loads.
+  var c = MyClass()     // doesn't print hello
+  var tmp = c.aProperty // prints hello on first access
+  tmp = c.aProperty     // doesn't print on subsequent loads.
 
-    c = MyClass()         // doesn't print hello
-    c.aProperty = 57      // overwriting the value prevents it from ever running
-    ```
+  c = MyClass()         // doesn't print hello
+  c.aProperty = 57      // overwriting the value prevents it from ever running
+  ```
 
   Because lazy properties inherently rely on mutation of the property, they
   cannot be `let`s.  They are currently also limited to being members of structs
@@ -2501,45 +2504,45 @@ Swift 2.2
   or `unowned` to capture the value with a weak or unowned pointer, and may
   contain an explicit expression if desired.  Some examples:
 
-    ```swift
-    takeClosure { print(self.title) }                    // strong capture
-    takeClosure { [weak self] in print(self!.title) }    // weak capture
-    takeClosure { [unowned self] in print(self.title) }  // unowned capture
-    ```
+  ```swift
+  takeClosure { print(self.title) }                    // strong capture
+  takeClosure { [weak self] in print(self!.title) }    // weak capture
+  takeClosure { [unowned self] in print(self.title) }  // unowned capture
+  ```
 
   You can also bind arbitrary expression to named values in the capture list.
   The expression is evaluated when the closure is formed, and captured with the
   specified strength.  For example:
 
-    ```swift
-    // weak capture of "self.parent"
-    takeClosure { [weak tmp = self.parent] in print(tmp!.title) }
-    ```
+  ```swift
+  // weak capture of "self.parent"
+  takeClosure { [weak tmp = self.parent] in print(tmp!.title) }
+  ```
 
   The full form of a closure can take a signature (an argument list and
   optionally a return type) if needed.  To use either the capture list or the
   signature, you must specify the context sensitive `in` keyword.  Here is a
   (weird because there is no need for `unowned`) example of a closure with both:
 
-    ```swift
-    myNSSet.enumerateObjectsUsingBlock { [unowned self] (obj, stop) in
-      self.considerWorkingWith(obj)
-    }
-    ```
+  ```swift
+  myNSSet.enumerateObjectsUsingBlock { [unowned self] (obj, stop) in
+    self.considerWorkingWith(obj)
+  }
+  ```
 
 * The word `with` is now removed from the first keyword argument name
   if an initialized imported from Objective-C. For example, instead of
   building `UIColor` as:
 
-    ```swift
-    UIColor(withRed: r, green: g, blue: b, alpha: a)
-    ```
+  ```swift
+  UIColor(withRed: r, green: g, blue: b, alpha: a)
+  ```
 
   it will now be:
 
-    ```swift
-    UIColor(red: r, green: g, blue: b, alpha: a)
-    ```
+  ```swift
+  UIColor(red: r, green: g, blue: b, alpha: a)
+  ```
 
 * `Dictionary` can be bridged to `NSDictionary` and vice versa:
 
@@ -2556,10 +2559,10 @@ Swift 2.2
 * Single-quoted literals are no longer recognized.  Use double-quoted literals
   and an explicit type annotation to define `Characters` and `UnicodeScalars`:
 
-    ```swift
-    var ch: Character = "a"
-    var us: UnicodeScalar = "a"
-    ```
+  ```swift
+  var ch: Character = "a"
+  var us: UnicodeScalar = "a"
+  ```
 
 2014-05-09
 ----------
@@ -2567,72 +2570,72 @@ Swift 2.2
 * The use of keyword arguments is now strictly enforced at the call
   site. For example, consider this method along with a call to it:
 
-    ```swift
-    class MyColor {
-      func mixColorWithRed(red: Float, green: Float, blue: Float) { /* ... */ }
-    }
+  ```swift
+  class MyColor {
+    func mixColorWithRed(red: Float, green: Float, blue: Float) { /* ... */ }
+  }
 
-    func mix(color: MyColor, r: Float, g: Float, b: Float) {
-      color.mixColorWithRed(r, g, b)
-    }
-    ```
+  func mix(color: MyColor, r: Float, g: Float, b: Float) {
+    color.mixColorWithRed(r, g, b)
+  }
+  ```
 
   The compiler will now complain about the missing `green:` and
   `blue:` labels, with a Fix-It to correct the code:
 
-    ```
-    color.swift:6:24: error: missing argument labels 'green:blue:' in call
-      color.mixColorWithRed(r, g, b)
-                           ^
-                               green:  blue:
-    ```
+  ```
+  color.swift:6:24: error: missing argument labels 'green:blue:' in call
+    color.mixColorWithRed(r, g, b)
+                         ^
+                             green:  blue:
+  ```
 
   The compiler handles missing, extraneous, and incorrectly-typed
   argument labels in the same manner. Recall that one can make a
   parameter a keyword argument with the back-tick or remove a keyword
   argument with the underscore.
 
-    ```swift
-    class MyColor {
-      func mixColor(`red: Float, green: Float, blue: Float) { /* ... */ }
-      func mixColorGuess(red: Float, _ green: Float, _ blue: Float) { /* ... */ }
-    }
+  ```swift
+  class MyColor {
+    func mixColor(`red: Float, green: Float, blue: Float) { /* ... */ }
+    func mixColorGuess(red: Float, _ green: Float, _ blue: Float) { /* ... */ }
+  }
 
-    func mix(color: MyColor, r: Float, g: Float, b: Float) {
-      color.mixColor(red: r, green: g, blue: b) // okay: all keyword arguments
-      color.mixColorGuess(r, g, b) // okay: no keyword arguments
-    }
-    ```
+  func mix(color: MyColor, r: Float, g: Float, b: Float) {
+    color.mixColor(red: r, green: g, blue: b) // okay: all keyword arguments
+    color.mixColorGuess(r, g, b) // okay: no keyword arguments
+  }
+  ```
 
   Arguments cannot be re-ordered unless the corresponding parameters
   have default arguments. For example, given:
 
-    ```swift
-    func printNumber(`number: Int, radix: Int = 10, separator: String = ",") { }
-    ```
+  ```swift
+  func printNumber(`number: Int, radix: Int = 10, separator: String = ",") { }
+  ```
 
   The following three calls are acceptable because only the arguments for
   defaulted parameters are re-ordered relative to each other:
 
-    ```swift
-    printNumber(number: 256, radix: 16, separator: "_")
-    printNumber(number: 256, separator: "_")
-    printNumber(number: 256, separator: ",", radix: 16)
-    ```
+  ```swift
+  printNumber(number: 256, radix: 16, separator: "_")
+  printNumber(number: 256, separator: "_")
+  printNumber(number: 256, separator: ",", radix: 16)
+  ```
 
   However, this call:
 
-    ```swift
-    printNumber(separator: ",", radix: 16, number: 256)
-    ```
+  ```swift
+  printNumber(separator: ",", radix: 16, number: 256)
+  ```
 
   results in an error due to the re-ordering:
 
-    ```
-    printnum.swift:7:40: error: argument 'number' must precede argument 'separator'
-    printNumber(separator: ",", radix: 16, number: 256)
-                ~~~~~~~~~~~~~~             ^       ~~~
-    ```
+  ```
+  printnum.swift:7:40: error: argument 'number' must precede argument 'separator'
+  printNumber(separator: ",", radix: 16, number: 256)
+              ~~~~~~~~~~~~~~             ^       ~~~
+  ```
 
 * `;` can no longer be used to demarcate an empty case in a switch statement,
   use `break` instead.
@@ -2648,13 +2651,13 @@ Swift 2.2
 * Convenience initializers are now spelled as `convenience init` instead of with
   the `-> Self` syntax.  For example:
 
-    ```swift
-    class Foo {
-      init(x : Int) {}  // designated initializer
+  ```swift
+  class Foo {
+    init(x : Int) {}  // designated initializer
 
-      convenience init() { self.init(42) } // convenience initializer
-    }
-    ```
+    convenience init() { self.init(42) } // convenience initializer
+  }
+  ```
 
   You still cannot declare designated initializers in extensions, only
   convenience initializers are allowed.
@@ -2677,15 +2680,15 @@ Swift 2.2
 
   For example:
 
-    ```swift
-    // CFBundleGetAllBundles() returns an Unmanaged<CFArrayRef>.
-    // From the documentation, we know that it returns a +0 value.
-    let bundles = CFBundleGetAllBundles().takeUnretainedValue()
+  ```swift
+  // CFBundleGetAllBundles() returns an Unmanaged<CFArrayRef>.
+  // From the documentation, we know that it returns a +0 value.
+  let bundles = CFBundleGetAllBundles().takeUnretainedValue()
 
-    // CFRunLoopCopyAllModes() returns an Unmanaged<CFArrayRef>.
-    // From the documentation, we know that it returns a +1 value.
-    let modes = CFRunLoopCopyAllModes(CFRunLoopGetMain()).takeRetainedValue()
-    ```
+  // CFRunLoopCopyAllModes() returns an Unmanaged<CFArrayRef>.
+  // From the documentation, we know that it returns a +1 value.
+  let modes = CFRunLoopCopyAllModes(CFRunLoopGetMain()).takeRetainedValue()
+  ```
 
   You can also use `Unmanaged` types to pass and return objects
   indirectly, as well as to generate unbalanced retains and releases
@@ -2701,20 +2704,21 @@ Swift 2.2
   `NSManagedObject` subclass to indicate that they should be handled by
   CoreData:
 
-    ```swift
-    class Employee : NSManagedObject {
-      @NSManaged var name: String
-      @NSManaged var department: Department
-    }
-    ```
+  ```swift
+  class Employee : NSManagedObject {
+    @NSManaged var name: String
+    @NSManaged var department: Department
+  }
+  ```
 
 * The `@weak` and `@unowned` attributes have become context sensitive keywords
   instead of attributes.  To declare a `weak` or `unowned` pointer, use:
 
-    ```swift
-    weak var someOtherWindow : NSWindow?
-    unowned var someWindow : NSWindow
-    ```
+  ```swift
+  weak var someOtherWindow : NSWindow?
+  unowned var someWindow : NSWindow
+  ```
+
   ... with no `@` on the `weak`/`unowned`.
 
 2014-04-30
@@ -2722,15 +2726,15 @@ Swift 2.2
 
 * Swift now supports a `#elseif` form for build configurations, e.g.:
 
-    ```swift
-    #if os(OSX)
-      typealias SKColor = NSColor
-    #elseif os(iOS)
-      typealias SKColor = UIColor
-    #else
-      typealias SKColor = Green
-    #endif
-    ```
+  ```swift
+  #if os(OSX)
+    typealias SKColor = NSColor
+  #elseif os(iOS)
+    typealias SKColor = UIColor
+  #else
+    typealias SKColor = Green
+  #endif
+  ```
 
 * You can now use the `true` and `false` constants in build configurations,
   allowing you to emulate the C idioms of `#if 0` (but spelled `#if false`).
@@ -2740,12 +2744,13 @@ Swift 2.2
 * It is no longer possible to specify `@mutating` as an attribute, you may only
   use it as a keyword, e.g.:
 
-    ```swift
-    struct Pair {
-      var x, y : Int
-      mutating func nuke() { x = 0; y = 0 }
-    }
-    ```
+  ```swift
+  struct Pair {
+    var x, y : Int
+    mutating func nuke() { x = 0; y = 0 }
+  }
+  ```
+
   The former `@!mutating` syntax used to mark setters as non-mutating is now
   spelled with the `nonmutating` keyword.  Both mutating and nonmutating are
   context sensitive keywords.
@@ -2759,15 +2764,15 @@ Swift 2.2
 
 * `Character` is the new character literal type:
 
-    ```swift
-    var x = 'a' // Infers 'Character' type
-    ```
+  ```swift
+  var x = 'a' // Infers 'Character' type
+  ```
 
   You can force inference of `UnicodeScalar` like this:
 
-    ```swift
-    var scalar: UnicodeScalar = 'a'
-    ```
+  ```swift
+  var scalar: UnicodeScalar = 'a'
+  ```
 
   `Character` type represents a Unicode extended grapheme cluster (to put it
   simply, a grapheme cluster is what users think of as a character: a base plus
@@ -2781,22 +2786,22 @@ Swift 2.2
   `break`/`continue` to those labels.  These use conventional C-style label
   syntax, and should be dedented relative to the code they are in.  An example:
 
-    ```swift
-    func breakContinue(x : Int) -> Int {
-    Outer:
-      for a in 0..1000 {
+  ```swift
+  func breakContinue(x : Int) -> Int {
+  Outer:
+    for a in 0..1000 {
 
-      Switch:
-        switch x {
-        case 42: break Outer
-        case 97: continue Outer
-        case 102: break Switch
-        case 13: continue // continue always works on loops.
-        case 139: break   // break will break out of the switch (but see below)
-        }
+    Switch:
+      switch x {
+      case 42: break Outer
+      case 97: continue Outer
+      case 102: break Switch
+      case 13: continue // continue always works on loops.
+      case 139: break   // break will break out of the switch (but see below)
       }
     }
-    ```
+  }
+  ```
 
 * We are changing the behavior of `break` to provide C-style semantics, to allow
   breaking out of a switch statement.  Previously, break completely ignored
@@ -2818,9 +2823,9 @@ Swift 2.2
 ----------
 * Enabling/disabling of asserts
 
-    ```swift
-    assert(condition, msg)
-    ```
+  ```swift
+  assert(condition, msg)
+  ```
 
   is enabled/disabled dependent on the optimization level. In debug mode at
   `-O0` asserts are enabled. At higher optimization levels asserts are disabled
@@ -2836,15 +2841,15 @@ Swift 2.2
 * The "selector-style" function and initializer declaration syntax is
   being phased out. For example, this:
 
-    ```
-    init withRed(red: CGFloat) green(CGFloat) blue(CGFloat) alpha(CGFloat)
-    ```
+  ```
+  init withRed(red: CGFloat) green(CGFloat) blue(CGFloat) alpha(CGFloat)
+  ```
 
   will now be written as:
 
-    ```swift
-    init(withRed red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat)
-    ```
+  ```swift
+  init(withRed red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat)
+  ```
 
   For each parameter, one can have both an argument API name (i.e.,
   `withRed`, which comes first and is used at the call site) and an
@@ -2855,15 +2860,15 @@ Swift 2.2
   underscore (`_`) can be used to mean "no name", as when the
   following function/method:
 
-    ```
-    func murderInRoom(room:String) withWeapon(weapon: String)
-    ```
+  ```
+  func murderInRoom(room:String) withWeapon(weapon: String)
+  ```
 
   is translated to:
 
-    ```swift
-    func murderInRoom(_ room: String, withWeapon weapon: String)
-    ```
+  ```swift
+  func murderInRoom(_ room: String, withWeapon weapon: String)
+  ```
 
   The compiler now complains when it sees the selector-style syntax
   and will provide Fix-Its to rewrite to the newer syntax.
@@ -2877,9 +2882,9 @@ Swift 2.2
   only be used with types that conform to the `NSCopying` protocol, or option
   types thereof.  For example:
 
-    ```swift
-    @NSCopying var myURL : NSURL
-    ```
+  ```swift
+  @NSCopying var myURL : NSURL
+  ```
 
   This fills the same niche as the (`copy`) attribute on Objective-C properties.
 
@@ -2889,11 +2894,11 @@ Swift 2.2
 
 * Optional variables and properties are now default-initialized to `nil`:
 
-    ```swift
-    class MyClass {
-      var cachedTitle: String?       // "= nil" is implied
-    }
-    ```
+  ```swift
+  class MyClass {
+    var cachedTitle: String?       // "= nil" is implied
+  }
+  ```
 
 * `@IBOutlet` has been improved in a few ways:
 
@@ -2901,9 +2906,9 @@ Swift 2.2
 
   - An `IBOutlet` declared as non-optional, i.e.,
 
-      ```swift
-      @IBOutlet var button: NSButton
-      ```
+    ```swift
+    @IBOutlet var button: NSButton
+    ```
 
     will be treated as an `@unchecked` optional.  This is considered to
     be the best practice way to write an outlet, unless you want to explicitly
@@ -2913,11 +2918,11 @@ Swift 2.2
 * The precedence of `is` and `as` is now higher than comparisons, allowing the
   following sorts of things to be written without parens:
 
-    ```swift
-    if x is NSButton && y is NSButtonCell { ... }
+  ```swift
+  if x is NSButton && y is NSButtonCell { ... }
 
-    if 3/4 as Float == 6/8 as Float { ... }
-    ```
+  if 3/4 as Float == 6/8 as Float { ... }
+  ```
 
 * Objective-C blocks are now transparently bridged to Swift closures. You never
   have to write `@objc_block` when writing Objective-C-compatible methods anymore.
@@ -2952,29 +2957,29 @@ Swift 2.2
 * Semicolon can be used as a single no-op statement in otherwise empty cases in
   `switch` statements:
 
-    ```swift
-    switch x {
-    case 1, 2, 3:
-      print("x is 1, 2 or 3")
-    default:
-      ;
-    }
-    ```
+  ```swift
+  switch x {
+  case 1, 2, 3:
+    print("x is 1, 2 or 3")
+  default:
+    ;
+  }
+  ```
 
 * `override` is now a context sensitive keyword, instead of an attribute:
 
-    ```swift
-    class Base {
-      var property: Int { return 0 }
-      func instanceFunc() {}
-      class func classFunc() {}
-    }
-    class Derived : Base {
-      override var property: Int { return 1 }
-      override func instanceFunc() {}
-      override class func classFunc() {}
-    }
-    ```
+  ```swift
+  class Base {
+    var property: Int { return 0 }
+    func instanceFunc() {}
+    class func classFunc() {}
+  }
+  class Derived : Base {
+    override var property: Int { return 1 }
+    override func instanceFunc() {}
+    override class func classFunc() {}
+  }
+  ```
 
 2014-04-02
 ----------
@@ -2994,37 +2999,37 @@ Swift 2.2
   of `UnsafePointer<T>`. These new types allow implicit conversions from
   Swift `inout` parameters and from Swift arrays:
 
-    ```swift
-    let rgb = CGColorSpaceCreateDeviceRGB()
-    // CGColorRef CGColorCreate(CGColorSpaceRef, const CGFloat*);
-    let white = CGColorCreate(rgb, [1.0, 1.0, 1.0])
+  ```swift
+  let rgb = CGColorSpaceCreateDeviceRGB()
+  // CGColorRef CGColorCreate(CGColorSpaceRef, const CGFloat*);
+  let white = CGColorCreate(rgb, [1.0, 1.0, 1.0])
 
-    var s = 0.0, c = 0.0
-    // void sincos(double, double*, double*);
-    sincos(M_PI/2, &s, &c)
-    ```
+  var s = 0.0, c = 0.0
+  // void sincos(double, double*, double*);
+  sincos(M_PI/2, &s, &c)
+  ```
 
   Pointers to pointers to ObjC classes, such as `NSError**`, get imported as
   `ObjCMutablePointer<NSError?>`. This type doesn't work with arrays, but
   accepts inouts or `nil`:
 
-    ```swift
-    var error: NSError? = nil
-    let words = NSString.stringWithContentsOfFile("/usr/share/dict/words",
-      encoding: .UTF8StringEncoding,
-      error: &error)
-    ```
+  ```swift
+  var error: NSError? = nil
+  let words = NSString.stringWithContentsOfFile("/usr/share/dict/words",
+    encoding: .UTF8StringEncoding,
+    error: &error)
+  ```
 
   `Void` pointer parameters can be passed an array or inout of any type:
 
-    ```swift
-    // + (NSData*)dataWithBytes:(const void*)bytes length:(NSUInteger)length;
-    let data = NSData.dataWithBytes([1.5, 2.25, 3.125],
-                                    length: sizeof(Double.self) * 3)
-    var fromData = [0.0, 0.0, 0.0]
-    // - (void)getBytes:(void*)bytes length:(NSUInteger)length;
-    data.getBytes(&fromData, length: sizeof(Double.self) * 3)
-    ```
+  ```swift
+  // + (NSData*)dataWithBytes:(const void*)bytes length:(NSUInteger)length;
+  let data = NSData.dataWithBytes([1.5, 2.25, 3.125],
+                                  length: sizeof(Double.self) * 3)
+  var fromData = [0.0, 0.0, 0.0]
+  // - (void)getBytes:(void*)bytes length:(NSUInteger)length;
+  data.getBytes(&fromData, length: sizeof(Double.self) * 3)
+  ```
 
   Note that we don't know whether an API reads or writes the C pointer, so
   you need to explicitly initialize values (like `s` and `c` above) even if
@@ -3049,9 +3054,9 @@ Swift 2.2
   if you would like to just silently ignore a message send a la Objective-C,
   you can use the postfix `?` operator like so:
 
-    ```swift
-    fieldsForKeys[kHeroFieldKey]?.setEditable(true)
-    ```
+  ```swift
+  fieldsForKeys[kHeroFieldKey]?.setEditable(true)
+  ```
 
   This design allows you to isolate and handle `nil` values in Swift code
   without requiring excessive "bookkeeping" boilerplate to use values that
@@ -3066,32 +3071,32 @@ Swift 2.2
 
 * The "separated" call syntax, i.e.,
 
-    ```
-    NSColor.colorWithRed(r) green(g) blue(b) alpha(a)
-    UIColor.init withRed(r) green(g) blue(b) alpha(a)
-    ```
+  ```
+  NSColor.colorWithRed(r) green(g) blue(b) alpha(a)
+  UIColor.init withRed(r) green(g) blue(b) alpha(a)
+  ```
 
   is being removed. The compiler will now produce an error and provide
   Fix-Its to rewrite calls to the "keyword-argument" syntax:
 
-    ```swift
-    NSColor.colorWithRed(r, green: g, blue: b, alpha: a)
-    UIColor(withRed: r, green:g, blue:b, alpha: a)
-    ```
+  ```swift
+  NSColor.colorWithRed(r, green: g, blue: b, alpha: a)
+  UIColor(withRed: r, green:g, blue:b, alpha: a)
+  ```
 
 * The `objc` attribute now optionally accepts a name, which can be
   used to provide the name for an entity as seen in Objective-C. For
   example:
 
-    ```swift
-    class MyType {
-      var enabled: Bool {
-        @objc(isEnabled) get {
-          // ...
-        }
+  ```swift
+  class MyType {
+    var enabled: Bool {
+      @objc(isEnabled) get {
+        // ...
       }
     }
-    ```
+  }
+  ```
 
   The `@objc` attribute can be used to name initializers, methods,
   getters, setters, classes, and protocols.
@@ -3109,15 +3114,15 @@ Swift 2.2
 
   Old syntax:
 
-    ```
-    @_silgen_name("foo"), @objc func bar() {}
-    ```
+  ```
+  @_silgen_name("foo"), @objc func bar() {}
+  ```
 
   New syntax:
 
-    ```swift
-    @_silgen_name("foo") @objc
-    ```
+  ```swift
+  @_silgen_name("foo") @objc
+  ```
 
   The `,` was vestigial when the attribute syntax consisted of bracket lists.
 
@@ -3125,52 +3130,52 @@ Swift 2.2
 
   Old syntax:
 
-    ```swift
-    switch x {
-    case .A:
-    case .B(1):
-      println(".A or .B(1)")
-    default:
-      // Ignore it.
-    }
-    ```
+  ```swift
+  switch x {
+  case .A:
+  case .B(1):
+    println(".A or .B(1)")
+  default:
+    // Ignore it.
+  }
+  ```
 
   New syntax:
 
-    ```swift
-    switch x {
-    case .A, .B(1):
-      println(".A or .B(1)")
-    default:
-      () // Ignore it.
-    }
-    ```
+  ```swift
+  switch x {
+  case .A, .B(1):
+    println(".A or .B(1)")
+  default:
+    () // Ignore it.
+  }
+  ```
 
   The following syntax can be used to introduce guard expressions for patterns
   inside the `case`:
 
-    ```swift
-    switch x {
-    case .A where isFoo(),
-         .B(1) where isBar():
-      ...
-    }
-    ```
+  ```swift
+  switch x {
+  case .A where isFoo(),
+       .B(1) where isBar():
+    ...
+  }
+  ```
 
 * Observing properties can now `@override` properties in a base class, so you
   can observe changes that happen to them.
 
-     ```swift
-     class MyAwesomeView : SomeBasicView {
-      @override
-      var enabled : Bool {
-        didSet {
-          println("Something changed")
-        }
+  ```swift
+  class MyAwesomeView : SomeBasicView {
+    @override
+    var enabled : Bool {
+      didSet {
+        println("Something changed")
       }
-      ...
     }
-    ```
+    ...
+  }
+  ```
 
   Observing properties still invoke the base class getter/setter (or storage)
   when accessed.
@@ -3179,99 +3184,99 @@ Swift 2.2
 * An `as` cast can now be forced using the postfix `!` operator without using
   parens:
 
-    ```swift
-    class B {}
-    class D {}
+  ```swift
+  class B {}
+  class D {}
 
-    let b: B = D()
+  let b: B = D()
 
-    // Before
-    let d1: D = (b as D)!
-    // After
-    let d2: D = b as D!
-    ```
+  // Before
+  let d1: D = (b as D)!
+  // After
+  let d2: D = b as D!
+  ```
 
   Casts can also be chained without parens:
 
-    ```swift
-    // Before
-    let b2: B = (((D() as B) as D)!) as B
-    // After
-    let b3: B = D() as B as D! as B
-    ```
+  ```swift
+  // Before
+  let b2: B = (((D() as B) as D)!) as B
+  // After
+  let b3: B = D() as B as D! as B
+  ```
 
 * `as` can now be used in `switch` cases to match the result of a checked cast:
 
-    ```swift
-    func printHand(hand: Any) {
-      switch hand {
-      case 1 as Int:
-        print("ace")
-      case 11 as Int:
-        print("jack")
-      case 12 as Int:
-        print("queen")
-      case 13 as Int:
-        print("king")
-      case let numberCard as Int:
-        print("\(numberCard)")
-      case let (a, b) as (Int, Int) where a == b:
-        print("two ")
-        printHand(a)
-        print("s")
-      case let (a, b) as (Int, Int):
-        printHand(a)
-        print(" and a ")
-        printHand(b)
-      case let (a, b, c) as (Int, Int, Int) where a == b && b == c:
-        print("three ")
-        printHand(a)
-        print("s")
-      case let (a, b, c) as (Int, Int, Int):
-        printHand(a)
-        print(", ")
-        printHand(b)
-        print(", and a ")
-        printHand(c)
-      default:
-        print("unknown hand")
-      }
+  ```swift
+  func printHand(hand: Any) {
+    switch hand {
+    case 1 as Int:
+      print("ace")
+    case 11 as Int:
+      print("jack")
+    case 12 as Int:
+      print("queen")
+    case 13 as Int:
+      print("king")
+    case let numberCard as Int:
+      print("\(numberCard)")
+    case let (a, b) as (Int, Int) where a == b:
+      print("two ")
+      printHand(a)
+      print("s")
+    case let (a, b) as (Int, Int):
+      printHand(a)
+      print(" and a ")
+      printHand(b)
+    case let (a, b, c) as (Int, Int, Int) where a == b && b == c:
+      print("three ")
+      printHand(a)
+      print("s")
+    case let (a, b, c) as (Int, Int, Int):
+      printHand(a)
+      print(", ")
+      printHand(b)
+      print(", and a ")
+      printHand(c)
+    default:
+      print("unknown hand")
     }
-    printHand(1, 1, 1) // prints "three aces"
-    printHand(12, 13) // prints "queen and a king"
-    ```
+  }
+  printHand(1, 1, 1) // prints "three aces"
+  printHand(12, 13) // prints "queen and a king"
+  ```
 
 * Enums and option sets imported from C/Objective-C still strip common
   prefixes, but the name of the enum itself is now taken into consideration as
   well. This keeps us from dropping important parts of a name that happen to be
   shared by all members.
 
-    ```objc
-    // NSFileManager.h
-    typedef NS_OPTIONS(NSUInteger, NSDirectoryEnumerationOptions) {
-        NSDirectoryEnumerationSkipsSubdirectoryDescendants = 1UL << 0,
-        NSDirectoryEnumerationSkipsPackageDescendants      = 1UL << 1,
-        NSDirectoryEnumerationSkipsHiddenFiles             = 1UL << 2
-    } NS_ENUM_AVAILABLE(10_6, 4_0);
-    ```
+  ```objc
+  // NSFileManager.h
+  typedef NS_OPTIONS(NSUInteger, NSDirectoryEnumerationOptions) {
+      NSDirectoryEnumerationSkipsSubdirectoryDescendants = 1UL << 0,
+      NSDirectoryEnumerationSkipsPackageDescendants      = 1UL << 1,
+      NSDirectoryEnumerationSkipsHiddenFiles             = 1UL << 2
+  } NS_ENUM_AVAILABLE(10_6, 4_0);
+  ```
 
-    ```swift
-    // Swift
-    let opts: NSDirectoryEnumerationOptions = .SkipsPackageDescendants
-    ```
+  ```swift
+  // Swift
+  let opts: NSDirectoryEnumerationOptions = .SkipsPackageDescendants
+  ```
 
 * `init` methods in Objective-C protocols are now imported as
   initializers. To conform to `NSCoding`, you will now need to provide
 
-    ```swift
-    init withCoder(aDecoder: NSCoder) { ... }
-    ```
+  ```swift
+  init withCoder(aDecoder: NSCoder) { ... }
+  ```
 
   rather than
 
-    ```swift
-    func initWithCoder(aDecoder: NSCoder) { ... }
-    ```
+  ```swift
+  func initWithCoder(aDecoder: NSCoder) { ... }
+  ```
 
 2014-03-19
 ----------
@@ -3280,43 +3285,43 @@ Swift 2.2
   values for all of its stored properties, it will automatically
   inherit all of the initializers of its superclass. For example:
 
-    ```swift
-    class Document {
-      var title: String
+  ```swift
+  class Document {
+    var title: String
 
-      init() -> Self {
-        self.init(withTitle: "Default title")
-      }
-
-      init withTitle(title: String) {
-        self.title = title
-      }
+    init() -> Self {
+      self.init(withTitle: "Default title")
     }
 
-    class VersionedDocument : Document {
-      var version = 0
-
-      // inherits 'init' and 'init withTitle:' from Document
+    init withTitle(title: String) {
+      self.title = title
     }
-    ```
+  }
+
+  class VersionedDocument : Document {
+    var version = 0
+
+    // inherits 'init' and 'init withTitle:' from Document
+  }
+  ```
 
   When one does provide a designated initializer in a subclass, as in
   the following example:
 
-    ```swift
-    class SecureDocument : Document {
-      var key: CryptoKey
+  ```swift
+  class SecureDocument : Document {
+    var key: CryptoKey
 
-      init withKey(key: CryptoKey) -> Self {
-        self.init(withKey: key, title: "Default title")        
-      }
-
-      init withKey(key: CryptoKey) title(String) {
-        self.key = key
-        super.init(withTitle: title)        
-      }
+    init withKey(key: CryptoKey) -> Self {
+      self.init(withKey: key, title: "Default title")
     }
-    ```
+
+    init withKey(key: CryptoKey) title(String) {
+      self.key = key
+      super.init(withTitle: title)
+    }
+  }
+  ```
 
   the compiler emits Objective-C method stubs for all of the
   designated initializers of the parent class that will abort at
@@ -3345,92 +3350,92 @@ Swift 2.2
   so you can easily implement an action for when a property changes value.  For
   example:
 
-    ```swift
-    class MyAwesomeView : UIView {
-      var enabled : Bool = false {
-      didSet(oldValue):
-        if oldValue != enabled {
-          self.needsDisplay = true
-        }
+  ```swift
+  class MyAwesomeView : UIView {
+    var enabled : Bool = false {
+    didSet(oldValue):
+      if oldValue != enabled {
+        self.needsDisplay = true
       }
-      ...
     }
-    ```
+    ...
+  }
+  ```
 
 * The implicit argument name for set and willSet property specifiers has been
   renamed from `(value)` to `(newValue)`.  For example:
 
-    ```swift
-    var i : Int {
-      get {
-        return 42
-      }
-      set {  // defaults to (newValue) instead of (value)
-        print(newValue)
-      }
+  ```swift
+  var i : Int {
+    get {
+      return 42
     }
-    ```
+    set {  // defaults to (newValue) instead of (value)
+      print(newValue)
+    }
+  }
+  ```
 
 * The magic identifier `__FUNCTION__` can now be used to get the name of the
   current function as a string. Like `__FILE__` and `__LINE__`, if
   `__FUNCTION__` is used as a default argument, the function name of the caller
   is passed as the argument.
 
-    ```swift
-    func malkovich() {
-      println(__FUNCTION__)
-    }
-    malkovich() // prints "malkovich"
+  ```swift
+  func malkovich() {
+    println(__FUNCTION__)
+  }
+  malkovich() // prints "malkovich"
 
-    func nameCaller(name: String = __FUNCTION__) -> String {
-      return name
-    }
+  func nameCaller(name: String = __FUNCTION__) -> String {
+    return name
+  }
 
-    func foo() {
-      println(nameCaller()) // prints "foo"
-    }
+  func foo() {
+    println(nameCaller()) // prints "foo"
+  }
 
-    func foo(x: Int) bar(y: Int) {
-      println(nameCaller()) // prints "foo:bar:"
-    }
-    ```
+  func foo(x: Int) bar(y: Int) {
+    println(nameCaller()) // prints "foo:bar:"
+  }
+  ```
 
   At top level, `__FUNCTION__` gives the module name:
 
-    ```swift
-    println(nameCaller()) // prints your module name
-    ```
+  ```swift
+  println(nameCaller()) // prints your module name
+  ```
 
 * Selector-style methods can now be referenced without applying arguments
   using member syntax `foo.bar:bas:`, for instance, to test for the availability
   of an optional protocol method:
 
-    ```swift
-    func getFrameOfObjectValueForColumn(ds: NSTableViewDataSource,
-                                        tableView: NSTableView,
-                                        column: NSTableColumn,
-                                        row: Int) -> AnyObject? {
-      if let getObjectValue = ds.tableView:objectValueForTableColumn:row: {
-        return getObjectValue(tableView, column, row)
-      }
-      return nil
+  ```swift
+  func getFrameOfObjectValueForColumn(ds: NSTableViewDataSource,
+                                      tableView: NSTableView,
+                                      column: NSTableColumn,
+                                      row: Int) -> AnyObject? {
+    if let getObjectValue = ds.tableView:objectValueForTableColumn:row: {
+      return getObjectValue(tableView, column, row)
     }
-    ```
+    return nil
+  }
+  ```
 
 * The compiler now warns about cases where a variable is inferred to have
   `AnyObject`, `AnyClass`, or `()` type, since type inference can turn a simple
   mistake (e.g. failing to cast an `AnyObject` when you meant to) into something
   with ripple effects.  Here is a simple example:
 
-    ```
-    t.swift:4:5: warning: variable 'fn' inferred to have type '()', which may be unexpected
-    var fn = abort()
-        ^
-    t.swift:4:5: note: add an explicit type annotation to silence this warning
-    var fn = abort()
-        ^
-          : ()
-    ```
+  ```
+  t.swift:4:5: warning: variable 'fn' inferred to have type '()', which may be unexpected
+  var fn = abort()
+      ^
+  t.swift:4:5: note: add an explicit type annotation to silence this warning
+  var fn = abort()
+      ^
+        : ()
+  ```
 
   If you actually did intend to declare a variable of one of these types, you
   can silence this warning by adding an explicit type (indicated by the Fixit).
@@ -3449,61 +3454,61 @@ Swift 2.2
 * All values now have a `self` property, exactly equivalent to the value
   itself:
 
-    ```swift
-    let x = 0
-    let x2 = x.self
-    ```
+  ```swift
+  let x = 0
+  let x2 = x.self
+  ```
 
   Types also have a `self` property that is the type object for that
   type:
 
-    ```swift
-    let theClass = NSObject.self
-    let theObj = theClass()
-    ```
+  ```swift
+  let theClass = NSObject.self
+  let theObj = theClass()
+  ```
 
   References to type names are now disallowed outside of a constructor call
   or member reference; to get a type object as a value, `T.self` is required.
   This prevents the mistake of intending to construct an instance of a
   class but forgetting the parens and ending up with the class object instead:
 
-    ```swift
-    let x = MyObject // oops, I meant MyObject()...
-    return x.description() // ...and I accidentally called +description
-                           //    instead of -description
-    ```
+  ```swift
+  let x = MyObject // oops, I meant MyObject()...
+  return x.description() // ...and I accidentally called +description
+                         //    instead of -description
+  ```
 
 * Initializers are now classified as **designated initializers**, which
   are responsible for initializing the current class object and
   chaining via `super.init`, and **convenience initializers**, which
   delegate to another initializer and can be inherited. For example:
 
-    ```swift
-    class A {
-      var str: String
+  ```swift
+  class A {
+    var str: String
 
-      init() -> Self { // convenience initializer
-        self.init(withString: "hello")
-      }
-
-      init withString(str: String) { // designated initializer
-        self.str = str
-      }
+    init() -> Self { // convenience initializer
+      self.init(withString: "hello")
     }
-    ```
+
+    init withString(str: String) { // designated initializer
+      self.str = str
+    }
+  }
+  ```
 
   When a subclass overrides all of its superclass's designated
   initializers, the convenience initializers are inherited:
 
-    ```swift
-    class B {
-      init withString(str: String) { // designated initializer
-        super.init(withString: str)
-      }
-
-      // inherits A.init()
+  ```swift
+  class B {
+    init withString(str: String) { // designated initializer
+      super.init(withString: str)
     }
-    ```
+
+    // inherits A.init()
+  }
+  ```
 
   Objective-C classes that provide `NS_DESIGNATED_INITIALIZER`
   annotations will have their init methods mapped to designated
@@ -3517,25 +3522,25 @@ Swift 2.2
   meaning that every subclass is required to provide that initializer
   either directly or by inheriting it from a superclass. To construct
 
-    ```swift
-    class View {
-      @required init withFrame(frame: CGRect) { ... }
-    }
+  ```swift
+  class View {
+    @required init withFrame(frame: CGRect) { ... }
+  }
 
-    func buildView(subclassObj: View.Type, frame: CGRect) -> View {
-      return subclassObj(withFrame: frame)
-    }
+  func buildView(subclassObj: View.Type, frame: CGRect) -> View {
+    return subclassObj(withFrame: frame)
+  }
 
-    class MyView : View {
-      @required init withFrame(frame: CGRect) {
-        super.init(withFrame: frame)
-      }
+  class MyView : View {
+    @required init withFrame(frame: CGRect) {
+      super.init(withFrame: frame)
     }
+  }
 
-    class MyOtherView : View {
-      // error: must override init withFrame(CGRect).
-    }
-    ```
+  class MyOtherView : View {
+    // error: must override init withFrame(CGRect).
+  }
+  ```
 
 * Properties in Objective-C protocols are now correctly imported as properties.
   (Previously the getter and setter were imported as methods.)
@@ -3545,25 +3550,25 @@ Swift 2.2
   This means they can be compared with the `==` and `!=` operators and can
   be used as `Dictionary` keys:
 
-    ```swift
-    enum Flavor {
-      case Lemon, Banana, Cherry
-    }
+  ```swift
+  enum Flavor {
+    case Lemon, Banana, Cherry
+  }
 
-    assert(Flavor.Lemon == .Lemon)
-    assert(Flavor.Banana != .Lemon)
+  assert(Flavor.Lemon == .Lemon)
+  assert(Flavor.Banana != .Lemon)
 
-    struct Profile {
-      var sweet, sour: Bool
-    }
+  struct Profile {
+    var sweet, sour: Bool
+  }
 
-    let flavorProfiles: Dictionary<Flavor, Profile> = [
-      .Lemon:  Profile(sweet: false, sour: true ),
-      .Banana: Profile(sweet: true,  sour: false),
-      .Cherry: Profile(sweet: true,  sour: true ),
-    ]
-    assert(flavorProfiles[.Lemon].sour)
-    ```
+  let flavorProfiles: Dictionary<Flavor, Profile> = [
+    .Lemon:  Profile(sweet: false, sour: true ),
+    .Banana: Profile(sweet: true,  sour: false),
+    .Cherry: Profile(sweet: true,  sour: true ),
+  ]
+  assert(flavorProfiles[.Lemon].sour)
+  ```
 
 * `val` has been removed.  Long live `let`!
 
@@ -3572,17 +3577,17 @@ Swift 2.2
   accessed by wrapping reserved keywords in backticks to suppress their builtin
   meaning:
 
-    ```swift
-    let `class` = 0
-    let `type` = 1
-    let `protocol` = 2
-    println(`class`)
-    println(`type`)
-    println(`protocol`)
+  ```swift
+  let `class` = 0
+  let `type` = 1
+  let `protocol` = 2
+  println(`class`)
+  println(`type`)
+  println(`protocol`)
 
-    func foo(Int) `class`(Int) {}
-    foo(0, `class`: 1)
-    ```
+  func foo(Int) `class`(Int) {}
+  foo(0, `class`: 1)
+  ```
 
 2014-02-26
 ----------
@@ -3590,15 +3595,15 @@ Swift 2.2
 * The `override` attribute is now required when overriding a method,
   property, or subscript from a superclass. For example:
 
-    ```swift
-    class A {
-      func foo() { }
-    }
+  ```swift
+  class A {
+    func foo() { }
+  }
 
-    class B : A {
-      @override func foo() { } // 'override' is required here
-    }
-    ```
+  class B : A {
+    @override func foo() { } // 'override' is required here
+  }
+  ```
 
 * We're renaming `val` back to `let`.  The compiler accepts both for this week,
   next week it will just accept `let`.  Please migrate your code this week, sorry
@@ -3626,25 +3631,25 @@ Swift 2.2
 
   For example:
 
-    ```swift
-    #if arch(x86_64)
-      println("Building for x86_64")
-    #else
-      println("Not building for x86_64")
-    #endif
+  ```swift
+  #if arch(x86_64)
+    println("Building for x86_64")
+  #else
+    println("Not building for x86_64")
+  #endif
 
-    class C {
-    #if os(OSX)
-      func foo() {
-        // OSX stuff goes here
-      }
-    #else
-      func foo() {
-        // non-OSX stuff goes here
-      }
-    #endif
+  class C {
+  #if os(OSX)
+    func foo() {
+      // OSX stuff goes here
     }
-    ```
+  #else
+    func foo() {
+      // non-OSX stuff goes here
+    }
+  #endif
+  }
+  ```
 
   The conditional expression of an `#if` block can be composed of one or more of
   the following expression types:
@@ -3655,28 +3660,28 @@ Swift 2.2
 
   For example:
 
-    ```swift
-    #if os(iOS) && !arch(I386)
-    ...
-    #endif
-    ```
+  ```swift
+  #if os(iOS) && !arch(I386)
+  ...
+  #endif
+  ```
 
   Note that `#if`/`#else`/`#endif` blocks do not constitute a preprocessor, and
   must form valid and complete expressions or statements. Hence, the following
   produces a parser error:
 
-    ```swift
-    class C {
+  ```swift
+  class C {
 
-    #if os(iOS)
-      func foo() {}
-    }
-    #else
-      func bar() {}
-      func baz() {}
-    }
-    #endif
-    ```
+  #if os(iOS)
+    func foo() {}
+  }
+  #else
+    func bar() {}
+    func baz() {}
+  }
+  #endif
+  ```
 
   Also note that "active" code will be parsed, typechecked and emitted, while
   "inactive" code will only be parsed.  This is why code in an inactive `#if` or
@@ -3689,12 +3694,12 @@ Swift 2.2
 * Swift now has both fully-closed ranges, which include their endpoint, and
   half-open ranges, which don't.
 
-    ```swift
-    (swift) for x in 0...5 { print(x) } ; print('\n') // half-open range
-    01234
-    (swift) for x in 0..5 { print(x) } ; print('\n')  // fully-closed range
-    012345
-    ```
+  ```swift
+  (swift) for x in 0...5 { print(x) } ; print('\n') // half-open range
+  01234
+  (swift) for x in 0..5 { print(x) } ; print('\n')  // fully-closed range
+  012345
+  ```
 
 * Property accessors have a new brace-based syntax, instead of using the former
   "label like" syntax.  The new syntax is:
@@ -3722,16 +3727,16 @@ Swift 2.2
 * Properties and subscripts now work in protocols, allowing you to do things
   like:
 
-    ```swift
-    protocol Subscriptable {
-      subscript(idx1: Int, idx2: Int) -> Int { get set }
-      var prop: Int { get }
-    }
+  ```swift
+  protocol Subscriptable {
+    subscript(idx1: Int, idx2: Int) -> Int { get set }
+    var prop: Int { get }
+  }
 
-    func foo(s: Subscriptable) {
-      return s.prop + s[42, 19]
-    }
-    ```
+  func foo(s: Subscriptable) {
+    return s.prop + s[42, 19]
+  }
+  ```
 
   These can be used for generic algorithms now as well.
 
@@ -3745,22 +3750,22 @@ Swift 2.2
   is related to `init`. We will refer to these as
   `deinitializers`. We've also dropped the parentheses, i.e.:
 
-    ```swift
-    class MyClass {
-      deinit {
-        // release any resources we might have acquired, etc.
-      }
+  ```swift
+  class MyClass {
+    deinit {
+      // release any resources we might have acquired, etc.
     }
-    ```
+  }
+  ```
 
 * Class methods defined within extensions of Objective-C classes can
   now refer to `self`, including using `instancetype` methods. As a
   result, `NSMutableString`, `NSMutableArray`, and `NSMutableDictionary`
   objects can now be created with their respective literals, i.e.,
 
-    ```swift
-    var dict: NSMutableDictionary = ["a" : 1, "b" : 2]
-    ```
+  ```swift
+  var dict: NSMutableDictionary = ["a" : 1, "b" : 2]
+  ```
 
 2014-02-19
 ----------
@@ -3772,41 +3777,41 @@ Swift 2.2
 * The `type` keyword was split into two: `static` and `class`.  One can define
   static functions and static properties in structs and enums like this:
 
-    ```swift
-    struct S {
-      static func foo() {}
-      static var bar: Int = 0
-    }
-    enum E {
-      static func foo() {}
-    }
-    ```
+  ```swift
+  struct S {
+    static func foo() {}
+    static var bar: Int = 0
+  }
+  enum E {
+    static func foo() {}
+  }
+  ```
 
   `class` keyword allows one to define class properties and class methods in
   classes and protocols:
 
-    ```swift
-    class C {
-      class func foo() {}
-      class var bar: Int = 0
-    }
-    protocol P {
-      class func foo() {}
-      class var bar: Int = 0
-    }
-    ```
+  ```swift
+  class C {
+    class func foo() {}
+    class var bar: Int = 0
+  }
+  protocol P {
+    class func foo() {}
+    class var bar: Int = 0
+  }
+  ```
 
   When using `class` and `static` in the extension, the choice of keyword
   depends on the type being extended:
 
-    ```swift
-    extension S {
-      static func baz() {}
-    }
-    extension C {
-      class func baz() {}
-    }
-    ```
+  ```swift
+  extension S {
+    static func baz() {}
+  }
+  extension C {
+    class func baz() {}
+  }
+  ```
 
 * The `let` keyword is no longer recognized.  Please move to `val`.
 
@@ -3833,28 +3838,28 @@ Swift 2.2
 
 * We are experimenting with a new message send syntax. For example:
 
-    ```swift
-    SKAction.colorizeWithColor(SKColor.whiteColor()) colorBlendFactor(1.0) duration(0.0)
-    ```
+  ```swift
+  SKAction.colorizeWithColor(SKColor.whiteColor()) colorBlendFactor(1.0) duration(0.0)
+  ```
 
   When the message send is too long to fit on a single line, subsequent lines
   must be indented from the start of the statement or declaration. For
   example, this is a single message send:
 
-    ```swift
-    SKAction.colorizeWithColor(SKColor.whiteColor())
-             colorBlendFactor(1.0)
-             duration(0.0)
-    ```
+  ```swift
+  SKAction.colorizeWithColor(SKColor.whiteColor())
+           colorBlendFactor(1.0)
+           duration(0.0)
+  ```
 
   while this is a message send to colorizeWithColor: followed by calls
   to `colorBlendFactor` and `duration` (on self or to a global function):
 
-    ```swift
-    SKAction.colorizeWithColor(SKColor.whiteColor())
-    colorBlendFactor(1.0) // call to 'colorBlendFactor'
-    duration(0.0) // call to 'duration'
-    ```
+  ```swift
+  SKAction.colorizeWithColor(SKColor.whiteColor())
+  colorBlendFactor(1.0) // call to 'colorBlendFactor'
+  duration(0.0) // call to 'duration'
+  ```
 
 * We are renaming the `let` keyword to `val`.  The `let` keyword didn't work
   out primarily because it is not a noun, so "defining a let" never sounded
@@ -3869,43 +3874,43 @@ Swift 2.2
 * Selector arguments in function arguments with only a type are now implicitly
   named after the selector chunk that contains them.  For example, instead of:
 
-    ```swift
-    func addIntsWithFirst(first : Int) second(second : Int) -> Int {
-      return first+second
-    }
-    ```
+  ```swift
+  func addIntsWithFirst(first : Int) second(second : Int) -> Int {
+    return first+second
+  }
+  ```
 
   you can now write:
 
-    ```swift
-    func addIntsWithFirst(first : Int) second(Int) -> Int {
-      return first+second
-    }
-    ```
+  ```swift
+  func addIntsWithFirst(first : Int) second(Int) -> Int {
+    return first+second
+  }
+  ```
 
   if you want to explicitly want to ignore an argument, it is recommended that
   you continue to use the `_` to discard it, as in:
 
-    ```swift
-    func addIntsWithFirst(first : Int) second(_ : Int) -> Int {...}
-    ```
+  ```swift
+  func addIntsWithFirst(first : Int) second(_ : Int) -> Int {...}
+  ```
 
 * The `@inout` attribute in argument lists has been promoted to a
   context-sensitive keyword.  Where before you might have written:
 
-    ```swift
-    func swap<T>(a : @inout T, b : @inout T) {
-      (a,b) = (b,a)
-    }
-    ```
+  ```swift
+  func swap<T>(a : @inout T, b : @inout T) {
+    (a,b) = (b,a)
+  }
+  ```
 
   You are now required to write:
 
-    ```swift
-    func swap<T>(inout a : T, inout b : T) {
-      (a,b) = (b,a)
-    }
-    ```
+  ```swift
+  func swap<T>(inout a : T, inout b : T) {
+    (a,b) = (b,a)
+  }
+  ```
 
   We made this change because `inout` is a fundamental part of the type
   system, which attributes are a poor match for.  The inout keyword is
@@ -3916,27 +3921,27 @@ Swift 2.2
   enums, and protocols) has been promoted to a context-sensitive keyword.
   Mutating struct methods are now written as:
 
-    ```swift
-    struct SomeStruct {
-      mutating func f() {}
-    }
-    ```
+  ```swift
+  struct SomeStruct {
+    mutating func f() {}
+  }
+  ```
 
 * Half-open ranges (those that don't include their endpoint) are now
   spelled with three `.`s instead of two, for consistency with Ruby.
 
-    ```swift
-    (swift) for x in 0...5 { print(x) } ; print('\n') // new syntax
-    01234
-    ```
+  ```swift
+  (swift) for x in 0...5 { print(x) } ; print('\n') // new syntax
+  01234
+  ```
 
   Next week, we'll introduce a fully-closed range which does include
   its endpoint.  This will provide:
 
-    ```swift
-    (swift) for x in 0..5 { print(x) } ; print('\n')  // coming soon
-    012345
-    ```
+  ```swift
+  (swift) for x in 0..5 { print(x) } ; print('\n')  // coming soon
+  012345
+  ```
 
   These changes are being released separately so that users have a
   chance to update their code before its semantics changes.
@@ -3944,23 +3949,23 @@ Swift 2.2
 * Objective-C properties with custom getters/setters are now imported
   into Swift as properties. For example, the Objective-C property
 
-    ```swift
-    @property (getter=isEnabled) BOOL enabled;
-    ```
+  ```swift
+  @property (getter=isEnabled) BOOL enabled;
+  ```
 
   was previously imported as getter (`isEnabled`) and setter
   (`setEnabled`) methods. Now, it is imported as a property (`enabled`).
 
 * `didSet`/`willSet` properties may now have an initial value specified:
 
-    ```swift
-    class MyAwesomeView : UIView {
-      var enabled : Bool = false {       // Initial value.
-      didSet: self.needsDisplay = true
-      }
-      ...
+  ```swift
+  class MyAwesomeView : UIView {
+    var enabled : Bool = false {       // Initial value.
+    didSet: self.needsDisplay = true
     }
-    ```
+    ...
+  }
+  ```
 
   they can also be used as non-member properties now, e.g. as a global
   variable or a local variable in a function.
@@ -3971,15 +3976,15 @@ Swift 2.2
   eliminates the need for casting with the numerous `instancetype` APIs,
   e.g.,
 
-    ```swift
-    let tileNode: SKSpriteNode = SKSpriteNode.spriteNodeWithTexture(tileAtlas.textureNamed("tile\(tileNumber).png"))!
-    ```
+  ```swift
+  let tileNode: SKSpriteNode = SKSpriteNode.spriteNodeWithTexture(tileAtlas.textureNamed("tile\(tileNumber).png"))!
+  ```
 
   becomes
 
-    ```swift
-    let tileNode = SKSpriteNode.spriteNodeWithTexture(tileAtlas.textureNamed("tile\(tileNumber).png"))
-    ```
+  ```swift
+  let tileNode = SKSpriteNode.spriteNodeWithTexture(tileAtlas.textureNamed("tile\(tileNumber).png"))
+  ```
 
   `DynamicSelf` will become more interesting in the coming weeks.
 
@@ -3994,33 +3999,33 @@ Swift 2.2
   branch. This allows for elegant testing of dynamic types, methods, nullable
   pointers, and other Optional things:
 
-    ```swift
-    class B : NSObject {}
-    class D : B {
-      func foo() { println("we have a D") }
-    }
-    var b: B = D()
-    if let d = b as D {
-      d.foo()
-    }
-    var id: AnyObject = D()
-    if let foo = id.foo {
-      foo()
-    }
-    ```
+  ```swift
+  class B : NSObject {}
+  class D : B {
+    func foo() { println("we have a D") }
+  }
+  var b: B = D()
+  if let d = b as D {
+    d.foo()
+  }
+  var id: AnyObject = D()
+  if let foo = id.foo {
+    foo()
+  }
+  ```
 
 * When referring to a member of an `AnyObject` (or `AnyClass`) object
   and using it directly (such as calling it, subscripting, or
   accessing a property on it), one no longer has to write the `?` or
   `!`. The run-time check will be performed implicitly. For example:
 
-    ```swift
-    func doSomethingOnViews(views: NSArray) {
-      for view in views {
-          view.updateLayer() // no '!' needed
-      }
+  ```swift
+  func doSomethingOnViews(views: NSArray) {
+    for view in views {
+      view.updateLayer() // no '!' needed
     }
-    ```
+  }
+  ```
 
   Note that one can still test whether the member is available at
   runtime using `?`, testing the optional result, or conditionally
@@ -4051,42 +4056,42 @@ Swift 2.2
 
   For example, where before you may have written something like this in a class:
 
-    ```swift
-    class MyAwesomeView : UIView {
-      var _enabled : Bool  // storage
-      var enabled : Bool { // computed property
-      get:
-        return _enabled
-      set:
-        _enabled = value
-        self.needDisplay = true
-      }
-      ...
+  ```swift
+  class MyAwesomeView : UIView {
+    var _enabled : Bool  // storage
+    var enabled : Bool { // computed property
+    get:
+      return _enabled
+    set:
+      _enabled = value
+      self.needDisplay = true
     }
-    ```
+    ...
+  }
+  ```
 
   you can now simply write:
 
-    ```swift
-    class MyAwesomeView : UIView {
-      var enabled : Bool {  // Has storage & observing methods
-      didSet: self.needDisplay = true
-      }
-      ...
+  ```swift
+  class MyAwesomeView : UIView {
+    var enabled : Bool {  // Has storage & observing methods
+    didSet: self.needDisplay = true
     }
-    ```
+    ...
+  }
+  ```
 
   Similarly, if you want notification before the value is stored, you can use
   `willSet`, which gets the incoming value before it is stored:
 
-    ```swift
-    var x : Int {
-    willSet(value):  // value is the default and may be elided, as with set:
-      println("changing from \(x) to \(value)")
-    didSet:
-      println("we've got a value of \(x) now.\n")
-    }
-    ```
+  ```swift
+  var x : Int {
+  willSet(value):  // value is the default and may be elided, as with set:
+    println("changing from \(x) to \(value)")
+  didSet:
+    println("we've got a value of \(x) now.\n")
+  }
+  ```
 
   The `willSet`/`didSet` observers are triggered on any store to the property,
   except stores from `init()`, destructors, or from within the observers
@@ -4152,54 +4157,54 @@ Swift 2.2
 * `let` declarations can now be used as struct/class properties.  A `let`
   property is mutable within `init()`, and immutable everywhere else.
 
-    ```swift
-    class C {
-      let x = 42
-      let y : Int
-      init(y : Int) {
-        self.y = y   // ok, self.y is mutable in init()
-      }
-
-      func test() {
-        y = 42       // error: 'y' isn't mutable
-      }
+  ```swift
+  class C {
+    let x = 42
+    let y : Int
+    init(y : Int) {
+      self.y = y   // ok, self.y is mutable in init()
     }
-    ```
+
+    func test() {
+      y = 42       // error: 'y' isn't mutable
+    }
+  }
+  ```
 
 * The immutability model for structs and enums is complete, and arguments are
   immutable by default.  This allows the compiler to reject mutations of
   temporary objects, catching common bugs.  For example, this is rejected:
 
-    ```swift
-    func setTo4(a : Double[]) {
-      a[10] = 4.0     // error: 'a' isn't mutable
-    }
-    ...
-    setTo4(someArray)
-    ```
+  ```swift
+  func setTo4(a : Double[]) {
+    a[10] = 4.0     // error: 'a' isn't mutable
+  }
+  ...
+  setTo4(someArray)
+  ```
 
   since `a` is semantically a copy of the array passed into the function.  The
   proper fix in this case is to mark the argument is `@inout`, so the effect is
   visible in the caller:
 
-    ```swift
-    func setTo4(a : @inout Double[]) {
-      a[10] = 4.0     // ok: 'a' is a mutable reference
-    }
-    ...
-    setTo4(&someArray)
-    ```
+  ```swift
+  func setTo4(a : @inout Double[]) {
+    a[10] = 4.0     // ok: 'a' is a mutable reference
+  }
+  ...
+  setTo4(&someArray)
+  ```
 
   Alternatively, if you really just want a local copy of the argument, you can
   mark it `var`.  The effects aren't visible in the caller, but this can be
   convenient in some cases:
 
-    ```swift
-    func doStringStuff(var s : String) {
-      s += "foo"
-      print(s)
-    }
-    ```
+  ```swift
+  func doStringStuff(var s : String) {
+    s += "foo"
+    print(s)
+  }
+  ```
 
 * Objective-C instance variables are no longer imported from headers written in
   Objective-C. Previously, they would appear as properties within the
@@ -4238,13 +4243,13 @@ Swift 2.2
   functions" and "type variables" which are functions and variables
   defined on a type (rather than on an instance of the type), e.g.,
 
-    ```swift
-    class X {
-      type func factory() -> X { ... }
+  ```swift
+  class X {
+    type func factory() -> X { ... }
 
-      type var version: Int
-    }
-    ```
+    type var version: Int
+  }
+  ```
 
   The use of `static` was actively misleading, since type methods
   on classes are dynamically dispatched (the same as Objective-C
@@ -4261,23 +4266,23 @@ Swift 2.2
 * Initializers can now delegate to other initializers within the same
   class by calling `self.init`. For example:
 
-    ```swift
-    class A { }
+  ```swift
+  class A { }
 
-    class B : A {
-      var title: String
+  class B : A {
+    var title: String
 
-      init() {
-        // note: cannot access self before delegating
-        self.init(withTitle: "My Title")
-      }
-
-      init withTitle(title: String) {
-        self.title = title
-        super.init()
-      }
+    init() {
+      // note: cannot access self before delegating
+      self.init(withTitle: "My Title")
     }
-    ```
+
+    init withTitle(title: String) {
+      self.title = title
+      super.init()
+    }
+  }
+  ```
 
 * Objective-C protocols no longer have the `Proto` suffix unless there
   is a collision with a class name. For example, `UITableViewDelegate` is
@@ -4295,33 +4300,33 @@ Swift 2.2
   operators, one can use the "masking" alternatives to get non-trapping
   behavior. The behavior of the non-trapping masking operators is defined:
 
-    ```swift
-    x &/ 0 == 0
-    x &% 0 == 0
-    SIGNED_MIN_FOR_TYPE &/ -1 == -1 // i.e. Int8: -0x80 / -1 == -0x80
-    SIGNED_MIN_FOR_TYPE &% -1 == 0
-    ```
+  ```swift
+  x &/ 0 == 0
+  x &% 0 == 0
+  SIGNED_MIN_FOR_TYPE &/ -1 == -1 // i.e. Int8: -0x80 / -1 == -0x80
+  SIGNED_MIN_FOR_TYPE &% -1 == 0
+  ```
 
 * Protocol conformance checking for `@mutating` methods is now implemented: an
   `@mutating` struct method only fulfills a protocol requirement if the protocol
   method was itself marked `@mutating`:
 
-    ```swift
-    protocol P {
-      func nonmutating()
-      @mutating
-      func mutating()
-    }
+  ```swift
+  protocol P {
+    func nonmutating()
+    @mutating
+    func mutating()
+  }
 
-    struct S : P {
-      // Error, @mutating method cannot implement non-@mutating requirement.
-      @mutating
-      func nonmutating() {}
+  struct S : P {
+    // Error, @mutating method cannot implement non-@mutating requirement.
+    @mutating
+    func nonmutating() {}
 
-      // Ok, mutating allowed, but not required.
-      func mutating() {}
-    }
-    ```
+    // Ok, mutating allowed, but not required.
+    func mutating() {}
+  }
+  ```
 
   As before, class methods never need to be marked `@mutating` (and indeed, they
   aren't allowed to be marked as such).
@@ -4342,15 +4347,15 @@ Swift 2.2
   `Array<T>`.  Map applies a function `f: T->U` to the values stored in
   the array and returns an Array<U>.  So,
 
-    ```swift
-    (swift) func names(x: Int[]) -> String[] {
-              return x.map { "<" + String($0) + ">" }
-            }
-    (swift) names(Array<Int>())
-    // r0 : String[] = []
-    (swift) names([3, 5, 7, 9])
-    // r1 : String[] = ["<3>", "<5>", "<7>", "<9>"]
-    ```
+  ```swift
+  (swift) func names(x: Int[]) -> String[] {
+            return x.map { "<" + String($0) + ">" }
+          }
+  (swift) names(Array<Int>())
+  // r0 : String[] = []
+  (swift) names([3, 5, 7, 9])
+  // r1 : String[] = ["<3>", "<5>", "<7>", "<9>"]
+  ```
 
 2013-12-18
 ----------
@@ -4371,23 +4376,23 @@ Swift 2.2
   you can now declare immutable value bindings with a new `let` declaration,
   which is semantically similar to defining a get-only property:
 
-    ```swift
-    let x = foo()
-    print(x)        // ok
-    x = bar()       // error: cannot modify an immutable value
-    swap(&x, &y)    // error: cannot pass an immutable value as @inout parameter
-    x.clear()       // error: cannot call mutating method on immutable value
-    getX().clear()  // error: cannot mutate a temporary
-    ```
+  ```swift
+  let x = foo()
+  print(x)        // ok
+  x = bar()       // error: cannot modify an immutable value
+  swap(&x, &y)    // error: cannot pass an immutable value as @inout parameter
+  x.clear()       // error: cannot call mutating method on immutable value
+  getX().clear()  // error: cannot mutate a temporary
+  ```
 
   In the case of bindings of class type, the bound object itself is still
   mutable, but you cannot change the binding.
 
-    ```swift
-    let r = Rocket()
-    r.blastOff()    // Ok, your rocket is mutable.
-    r = Rocket()    // error: cannot modify an immutable binding.
-    ```
+  ```swift
+  let r = Rocket()
+  r.blastOff()    // Ok, your rocket is mutable.
+  r = Rocket()    // error: cannot modify an immutable binding.
+  ```
 
   In addition to the `let` declaration itself, `self` on classes, and a few
   other minor things have switched to immutable bindings.
@@ -4399,41 +4404,41 @@ Swift 2.2
   does not mutate `self`, though you can opt into mutating behavior with a new
   `@mutating` attribute:
 
-    ```swift
-    struct MyWeirdCounter {
-      var count : Int
+  ```swift
+  struct MyWeirdCounter {
+    var count : Int
 
-      func empty() -> Bool { return count == 0 }
+    func empty() -> Bool { return count == 0 }
 
-      @mutating
-      func reset() {
-        count = 0
-      }
-      ...
+    @mutating
+    func reset() {
+      count = 0
     }
+    ...
+  }
 
-    let x = MyWeirdCounter()
-    x.empty()   // ok
-    x.reset()   // error, cannot mutate immutable 'let' value
-    ```
+  let x = MyWeirdCounter()
+  x.empty()   // ok
+  x.reset()   // error, cannot mutate immutable 'let' value
+  ```
 
-   One missing piece is that the compiler does not yet reject mutations of self
-   in a method that isn't marked `@mutating`.  That will be coming soon.  Related
-   to methods are properties.  Getters and setters can be marked mutating as
-   well:
+  One missing piece is that the compiler does not yet reject mutations of self
+  in a method that isn't marked `@mutating`.  That will be coming soon.  Related
+  to methods are properties.  Getters and setters can be marked mutating as
+  well:
 
-   ```swift
-   extension MyWeirdCounter {
-      var myproperty : Int {
-      get:
-        return 42
+  ```swift
+  extension MyWeirdCounter {
+    var myproperty : Int {
+    get:
+      return 42
 
-      @mutating
-      set:
-        count = value*2
-      }
+    @mutating
+    set:
+      count = value*2
     }
-    ```
+  }
+  ```
 
   The intention is for setters to default to mutating, but this has not been
   implemented yet.  There is more to come here.
@@ -4442,21 +4447,21 @@ Swift 2.2
   `Optional<T>`.  Map applies a function `f: T->U` to any value stored in
   an `Optional<T>`, and returns an `Optional<U>`.  So,
 
-    ```swift
-   (swift) func nameOf(x: Int?) -> String? {
-             return x.map { "<" + String($0) + ">" }
-           }
-   (swift)
-   (swift) var no = nameOf(.None) // Empty optional in...
-   // no : String? = <unprintable value>
-   (swift) no ? "yes" : "no"      // ...empty optional out
-   // r0 : String = "no"
-   (swift)
-   (swift) nameOf(.Some(42))      // Non-empty in
-   // r1 : String? = <unprintable value>
-   (swift) nameOf(.Some(42))!     // Non-empty out
-   // r2 : String = "<42>"
-   ```
+  ```swift
+  (swift) func nameOf(x: Int?) -> String? {
+            return x.map { "<" + String($0) + ">" }
+          }
+  (swift)
+  (swift) var no = nameOf(.None) // Empty optional in...
+  // no : String? = <unprintable value>
+  (swift) no ? "yes" : "no"      // ...empty optional out
+  // r0 : String = "no"
+  (swift)
+  (swift) nameOf(.Some(42))      // Non-empty in
+  // r1 : String? = <unprintable value>
+  (swift) nameOf(.Some(42))!     // Non-empty out
+  // r2 : String = "<42>"
+  ```
 
 * Cocoa types declared with the `NS_OPTIONS` macro are now available in Swift.
   Like `NS_ENUM` types, their values are automatically shortened based
@@ -4464,12 +4469,12 @@ Swift 2.2
   be elided when type context provides it. They can be used in `if` statements
   using the `&`, `|`, `^`, and `~` operators as in C:
 
-    ```swift
-    var options: NSJSONWritingOptions = .PrettyPrinted
-    if options & .PrettyPrinted {
-      println("pretty-printing enabled")
-    }
-    ```
+  ```swift
+  var options: NSJSONWritingOptions = .PrettyPrinted
+  if options & .PrettyPrinted {
+    println("pretty-printing enabled")
+  }
+  ```
 
   We haven't yet designed a convenient way to author `NS_OPTIONS`-like types
   in Swift.
@@ -4486,12 +4491,12 @@ Swift 2.2
   that will be `.Some(casted x)` on success and `.None` on failure). An
   example:
 
-    ```swift
-    func f(x: AnyObject, y: NSControl) {
-      var view = y as NSView                  // has type 'NSView'
-      var maybeView = x as NSView             // has type NSView?
-    }
-    ```
+  ```swift
+  func f(x: AnyObject, y: NSControl) {
+    var view = y as NSView                  // has type 'NSView'
+    var maybeView = x as NSView             // has type NSView?
+  }
+  ```
 
 * The precedence levels of binary operators has been redefined, with a much
   simpler model than C's.  This is with a goal to define away classes of bugs
@@ -4500,14 +4505,15 @@ Swift 2.2
   relationships without having to look them up.
 
   We ended up with 6 levels, from tightest binding to loosest:
-    ```
-    exponentiative: <<, >>
-    multiplicative: *, /, %, &
-    additive: +, -, |, ^
-    comparative: ==, !=, <, <=, >=, >
-    conjunctive: &&
-    disjunctive: ||
-    ```
+
+  ```
+  exponentiative: <<, >>
+  multiplicative: *, /, %, &
+  additive: +, -, |, ^
+  comparative: ==, !=, <, <=, >=, >
+  conjunctive: &&
+  disjunctive: ||
+  ```
 
 * The `Enumerable` protocol has been renamed `Sequence`.
 
@@ -4523,16 +4529,16 @@ Swift 2.2
 
   For example, this will yield an error:
 
-    ```swift
-    class SomeClass : SomeBase {
-      var x : Int
+  ```swift
+  class SomeClass : SomeBase {
+    var x : Int
 
-      init() {
-        // error: property 'self.x' not initialized at super.init call
-        super.init()
-      }
+    init() {
+      // error: property 'self.x' not initialized at super.init call
+      super.init()
     }
-    ```
+  }
+  ```
 
   A simple fix for this is to change the property definition to `var x = 0`,
   or to explicitly assign to it before calling `super.init()`.
@@ -4557,26 +4563,26 @@ Swift 2.2
 ----------
 * Unreachable code warning has been added:
 
-    ```swift
-    var y: Int = 1
-    if y == 1 { // note: condition always evaluates to true
-      return y
-    }
-    return 1 // warning: will never be executed
-    ```
+  ```swift
+  var y: Int = 1
+  if y == 1 { // note: condition always evaluates to true
+    return y
+  }
+  return 1 // warning: will never be executed
+  ```
 
 * Overflows on integer type conversions are now detected at runtime and, when
   dealing with constants, at compile time:
 
-    ```swift
-    var i: Int = -129
-    var i8 = Int8(i)
-    // error: integer overflows when converted from 'Int' to 'Int8'
+  ```swift
+  var i: Int = -129
+  var i8 = Int8(i)
+  // error: integer overflows when converted from 'Int' to 'Int8'
 
-    var si = Int8(-1)
-    var ui = UInt8(si)
-    // error: negative integer cannot be converted to unsigned type 'UInt8'
-    ```
+  var si = Int8(-1)
+  var ui = UInt8(si)
+  // error: negative integer cannot be converted to unsigned type 'UInt8'
+  ```
 
 * `def` keyword was changed back to `func`.
 
@@ -4586,11 +4592,11 @@ Swift 2.2
 * Objective-C-compatible protocols can now contain optional
   requirements, indicated by the `@optional` attribute:
 
-    ```swift
-    @class_protocol @objc protocol NSWobbling {
-      @optional def wobble()
-    }
-    ```
+  ```swift
+  @class_protocol @objc protocol NSWobbling {
+    @optional def wobble()
+  }
+  ```
 
   A class that conforms to the `NSWobbling` protocol above can (but does
   not have to) implement `wobble`. When referring to the `wobble`
@@ -4601,18 +4607,18 @@ Swift 2.2
   use `!` to assume that the method is always there, `?` to chain the
   optional, or conditional branches to handle each case distinctly:
 
-    ```swift
-    def tryToWobble(w : NSWobbling) {
-      w.wobble()   // error: cannot call a value of optional type
-      w.wobble!()  // okay: calls -wobble, but fails at runtime if not there
-      w.wobble?()  // okay: calls -wobble only if it's there, otherwise no-op
-      if w.wobble {
-        // okay: we know -wobble is there
-      } else {
-        // okay: we know -wobble is not there
-      }
+  ```swift
+  def tryToWobble(w : NSWobbling) {
+    w.wobble()   // error: cannot call a value of optional type
+    w.wobble!()  // okay: calls -wobble, but fails at runtime if not there
+    w.wobble?()  // okay: calls -wobble only if it's there, otherwise no-op
+    if w.wobble {
+      // okay: we know -wobble is there
+    } else {
+      // okay: we know -wobble is not there
     }
-    ```
+  }
+  ```
 
 * Enums from Cocoa that are declared with the `NS_ENUM` macro are now imported
   into Swift as Swift enums. Like all Swift enums, the constants of the Cocoa
@@ -4620,71 +4626,71 @@ Swift 2.2
   common prefix of all of the constant names in the enum when forming the Swift
   interface. For example, this Objective-C declaration:
 
-    ```objc
-    typedef NS_ENUM(NSInteger, NSComparisonResult) {
-      NSOrderedAscending,
-      NSOrderedSame,
-      NSOrderedDescending,
-    };
-    ```
+  ```objc
+  typedef NS_ENUM(NSInteger, NSComparisonResult) {
+    NSOrderedAscending,
+    NSOrderedSame,
+    NSOrderedDescending,
+  };
+  ```
 
   shows up in Swift as:
 
-    ```swift
-    enum NSComparisonResult : Int {
-      case Ascending, Same, Descending
-    }
-    ```
+  ```swift
+  enum NSComparisonResult : Int {
+    case Ascending, Same, Descending
+  }
+  ```
 
   The `enum` cases can then take advantage of type inference from context.
   In Objective-C, you would write:
 
-    ```objc
-    NSNumber *foo = [NSNumber numberWithInt: 1];
-    NSNumber *bar = [NSNumber numberWithInt: 2];
+  ```objc
+  NSNumber *foo = [NSNumber numberWithInt: 1];
+  NSNumber *bar = [NSNumber numberWithInt: 2];
 
-    switch ([foo compare: bar]) {
-    case NSOrderedAscending:
-      NSLog(@"ascending\n");
-      break;
-    case NSOrderedSame:
-      NSLog(@"same\n");
-      break;
-    case NSOrderedDescending:
-      NSLog(@"descending\n");
-      break;
-    }
-    ```
+  switch ([foo compare: bar]) {
+  case NSOrderedAscending:
+    NSLog(@"ascending\n");
+    break;
+  case NSOrderedSame:
+    NSLog(@"same\n");
+    break;
+  case NSOrderedDescending:
+    NSLog(@"descending\n");
+    break;
+  }
+  ```
 
   In Swift, this becomes:
 
-    ```swift
-    var foo: NSNumber = 1
-    var bar: NSNumber = 2
+  ```swift
+  var foo: NSNumber = 1
+  var bar: NSNumber = 2
 
-    switch foo.compare(bar) {
-    case .Ascending:
-      println("ascending")
-    case .Same:
-      println("same")
-    case .Descending:
-      println("descending")
-    }
-    ```
+  switch foo.compare(bar) {
+  case .Ascending:
+    println("ascending")
+  case .Same:
+    println("same")
+  case .Descending:
+    println("descending")
+  }
+  ```
 
 * Work has begun on implementing static properties. Currently they are supported
   for nongeneric structs and enums.
 
-    ```swift
-    struct Foo {
-      static var foo: Int = 2
-    }
-    enum Bar {
-      static var bar: Int = 3
-    }
-    println(Foo.foo)
-    println(Bar.bar)
-    ```
+  ```swift
+  struct Foo {
+    static var foo: Int = 2
+  }
+  enum Bar {
+    static var bar: Int = 3
+  }
+  println(Foo.foo)
+  println(Bar.bar)
+  ```
 
 2013-11-06
 ----------
@@ -4695,13 +4701,13 @@ Swift 2.2
   optional type `U?` if `T` is implicitly convertible to `U`. For example,
   optional subclasses convert to their optional base classes:
 
-    ```swift
-    class Base {}
-    class Derived : Base {}
+  ```swift
+  class Base {}
+  class Derived : Base {}
 
-    var d: Derived? = Derived()
-    var b: Base? = d
-    ```
+  var d: Derived? = Derived()
+  var b: Base? = d
+  ```
 
 2013-10-30
 ----------
@@ -4710,21 +4716,21 @@ Swift 2.2
   variable to have its type inferred from its initializer, including
   global and instance variables:
 
-    ```swift
-    class MyClass {
-      var size = 0 // inferred to Int
-    }
+  ```swift
+  class MyClass {
+    var size = 0 // inferred to Int
+  }
 
-    var name = "Swift"
-    ```
+  var name = "Swift"
+  ```
 
   Additionally, the arguments of a generic type can also be inferred
   from the initializer:
 
-    ```swift
-    // infers Dictionary<String, Int>
-    var dict: Dictionary = ["Hello": 1, "World": 2]
-    ```
+  ```swift
+  // infers Dictionary<String, Int>
+  var dict: Dictionary = ["Hello": 1, "World": 2]
+  ```
 
 
 2013-10-23
@@ -4741,32 +4747,32 @@ Swift 2.2
 * `switch` can now pattern-match into structs and classes, using the syntax
   `case Type(property1: pattern1, property2: pattern2, ...):`.
 
-    ```swift
-    struct Point { var x, y: Double }
-    struct Size { var w, h: Double }
-    struct Rect { var origin: Point; var size: Size }
+  ```swift
+  struct Point { var x, y: Double }
+  struct Size { var w, h: Double }
+  struct Rect { var origin: Point; var size: Size }
 
-    var square = Rect(Point(0, 0), Size(10, 10))
+  var square = Rect(Point(0, 0), Size(10, 10))
 
-    switch square {
-    case Rect(size: Size(w: var w, h: var h)) where w == h:
-      println("square")
-    case Rect(size: Size(w: var w, h: var h)) where w > h:
-      println("long rectangle")
-    default:
-      println("tall rectangle")
-    }
-    ```
+  switch square {
+  case Rect(size: Size(w: var w, h: var h)) where w == h:
+    println("square")
+  case Rect(size: Size(w: var w, h: var h)) where w > h:
+    println("long rectangle")
+  default:
+    println("tall rectangle")
+  }
+  ```
 
   Currently only stored properties ("ivars" in ObjC terminology) are
   supported by the implementation.
 
 * Array and dictionary literals allow an optional trailing comma:
 
-    ```swift
-    var a = [ 1, 2, ]
-    var d = [ "a": 1, "b": 2, ]
-    ```
+  ```swift
+  var a = [ 1, 2, ]
+  var d = [ "a": 1, "b": 2, ]
+  ```
 
 2013-10-16
 ----------
@@ -4774,30 +4780,30 @@ Swift 2.2
   implicitly convert to any class type. For example, the following
   code is ill-formed:
 
-    ```swift
-    func getContentViewBounds(window : NSWindow) -> NSRect {
-      var view : NSView = window.contentView() // error: 'id' doesn't implicitly convert to NSView
-     return view.bounds()
-    }
-    ```
+  ```swift
+  func getContentViewBounds(window : NSWindow) -> NSRect {
+    var view : NSView = window.contentView() // error: 'id' doesn't implicitly convert to NSView
+   return view.bounds()
+  }
+  ```
 
   because `contentView()` returns an `id`. One can now use the postfix
   `!` operator to allow an object of type `id` to convert to any class
   type, e.g.,
 
-    ```swift
-    func getContentViewBounds(window : NSWindow) -> NSRect {
-      var view : NSView = window.contentView()! // ok: checked conversion to NSView
-     return view.bounds()
-    }
-    ```
+  ```swift
+  func getContentViewBounds(window : NSWindow) -> NSRect {
+    var view : NSView = window.contentView()! // ok: checked conversion to NSView
+   return view.bounds()
+  }
+  ```
 
   The conversion is checked at run-time, and the program will fail if
   the object is not an NSView. This is shorthand for
 
-    ```swift
-    var view : NSView = (window.contentView() as NSView)!
-    ```
+  ```swift
+  var view : NSView = (window.contentView() as NSView)!
+  ```
 
   which checks whether the content view is an `NSView` (via the `as
   NSView`). That operation returns an optional `NSView` (written
@@ -4815,48 +4821,48 @@ Swift 2.2
   literals that are too large to fit the type are now reported by the compiler.
   Here are some examples:
 
-    ```swift
-    var x = Int8(-129)
-    // error: integer literal overflows when stored into 'Int8'
+  ```swift
+  var x = Int8(-129)
+  // error: integer literal overflows when stored into 'Int8'
 
-    var y : Int = 0xFFFF_FFFF_FFFF_FFFF_F
-    // error: integer literal overflows when stored into 'Int'
-    ```
+  var y : Int = 0xFFFF_FFFF_FFFF_FFFF_F
+  // error: integer literal overflows when stored into 'Int'
+  ```
 
   Overflows in constant integer expressions are also reported by the compiler.
 
-    ```swift
-    var x : Int8 = 125
-    var y : Int8 = x + 125
-    // error: arithmetic operation '125 + 125' (on type 'Int8') results in
-    //        an overflow
-    ```
+  ```swift
+  var x : Int8 = 125
+  var y : Int8 = x + 125
+  // error: arithmetic operation '125 + 125' (on type 'Int8') results in
+  //        an overflow
+  ```
 
 * Division by zero in constant expressions is now detected by the compiler:
 
-    ```swift
-    var z: Int = 0
-    var x = 5 / z  // error: division by zero
-    ```
+  ```swift
+  var z: Int = 0
+  var x = 5 / z  // error: division by zero
+  ```
 
 * Generic structs with type parameters as field types are now fully supported.
 
-    ```swift
-    struct Pair<T, U> {
-      var first: T
-      var second: U
-    }
-    ```
+  ```swift
+  struct Pair<T, U> {
+    var first: T
+    var second: U
+  }
+  ```
 
 2013-10-09
 ----------
 * Autorelease pools can now be created using the `autoreleasepool` function.
 
-    ```swift
-    autoreleasepool {
-      // code
-    }
-    ```
+  ```swift
+  autoreleasepool {
+    // code
+  }
+  ```
 
   Note that the wrapped code is a closure, so constructs like `break` and
   `continue` and `return` do not behave as they would inside an Objective-C
@@ -4865,59 +4871,59 @@ Swift 2.2
 * Enums can now declare a "raw type", and cases can declare "raw values",
   similar to the integer underlying type of C enums:
 
-    ```swift
-    // Declare the underlying type as in Objective-C or C++11, with
-    // ': Type'
-    enum AreaCode : Int {
-      // Assign explicit values to cases with '='
-      case SanFrancisco = 415
-      case EastBay = 510
-      case Peninsula = 650
-      case SanJose = 408
-      // Values are also assignable by implicit auto-increment
-      case Galveston // = 409
-      case Baltimore // = 410
-    }
-    ```
+  ```swift
+  // Declare the underlying type as in Objective-C or C++11, with
+  // ': Type'
+  enum AreaCode : Int {
+    // Assign explicit values to cases with '='
+    case SanFrancisco = 415
+    case EastBay = 510
+    case Peninsula = 650
+    case SanJose = 408
+    // Values are also assignable by implicit auto-increment
+    case Galveston // = 409
+    case Baltimore // = 410
+  }
+  ```
 
   This introduces `fromRaw` and `toRaw` methods on the enum to perform
   conversions from and to the raw type:
 
-    ```swift
-    /* As if declared:
-        extension AreaCode {
-          // Take a raw value, and produce the corresponding enum value,
-          // or None if there is no corresponding enum value
-          static func fromRaw(raw:Int) -> AreaCode?
+  ```swift
+  /* As if declared:
+      extension AreaCode {
+        // Take a raw value, and produce the corresponding enum value,
+        // or None if there is no corresponding enum value
+        static func fromRaw(raw:Int) -> AreaCode?
 
 
-          // Return the corresponding raw value for 'self'
-          func toRaw() -> Int
-        }
-     */
+        // Return the corresponding raw value for 'self'
+        func toRaw() -> Int
+      }
+   */
 
-    AreaCode.fromRaw(415) // => .Some(.SanFrancisco)
-    AreaCode.fromRaw(111) // => .None
-    AreaCode.SanJose.toRaw() // => 408
-    ```
+  AreaCode.fromRaw(415) // => .Some(.SanFrancisco)
+  AreaCode.fromRaw(111) // => .None
+  AreaCode.SanJose.toRaw() // => 408
+  ```
 
   Raw types are not limited to integer types--they can additionally be
   character, floating-point, or string values:
 
-    ```swift
-    enum State : String {
-      case CA = "California"
-      case OR = "Oregon"
-      case WA = "Washington"
-    }
+  ```swift
+  enum State : String {
+    case CA = "California"
+    case OR = "Oregon"
+    case WA = "Washington"
+  }
 
-    enum SquareRootOfInteger : Float {
-      case One = 1.0
-      case Two = 1.414
-      case Three = 1.732
-      case Four = 2.0
-    }
-    ```
+  enum SquareRootOfInteger : Float {
+    case One = 1.0
+    case Two = 1.414
+    case Three = 1.732
+    case Four = 2.0
+  }
+  ```
 
   Raw types are currently limited to simple C-like enums with no payload cases.
   The raw values are currently restricted to simple literal values; expressions
@@ -4927,28 +4933,28 @@ Swift 2.2
   Enums with raw types implicitly conform to the `RawRepresentable` protocol,
   which exposes the fromRaw and toRaw methods to generics:
 
-    ```swift
-    protocol RawRepresentable {
-      typealias RawType
-      static func fromRaw(raw: RawType) -> Self?
-      func toRaw() -> RawType
-    }
-    ```
+  ```swift
+  protocol RawRepresentable {
+    typealias RawType
+    static func fromRaw(raw: RawType) -> Self?
+    func toRaw() -> RawType
+  }
+  ```
 
 * Attribute syntax has been redesigned (see **(rdar://10700853)** and
   **(rdar://14462729)**) so that attributes now precede the declaration and use
   the `@` character to signify them.  Where before you might have written:
 
-    ```swift
-    func [someattribute=42] foo(a : Int) {}
-    ```
+  ```swift
+  func [someattribute=42] foo(a : Int) {}
+  ```
 
   you now write:
 
-    ```swift
-    @someattribute=42
-    func foo(a : Int) {}
-    ```
+  ```swift
+  @someattribute=42
+  func foo(a : Int) {}
+  ```
 
   This flows a lot better (attributes don't push the name for declarations away),
   and means that square brackets are only used for array types, collection
@@ -4957,12 +4963,12 @@ Swift 2.2
 * The `for` loop now uses the Generator protocol instead of the `Enumerator`
   protocol to iterate a sequence. This protocol looks like this:
 
-    ```swift
-    protocol Generator {
-      typealias Element
-      func next() -> Element?
-    }
-    ```
+  ```swift
+  protocol Generator {
+    typealias Element
+    func next() -> Element?
+  }
+  ```
 
   The single method `next()` advances the generator and returns an
   Optional, which is either `.Some(value)`, wrapping the next value out
@@ -4989,39 +4995,39 @@ Swift 2.2
   captured variable outlives the function, you can observe this.  For example,
   this code:
 
-    ```swift
-    func foo(x : [inout] Int) -> () -> Int {
-      func bar() -> Int {
-        x += 1
-        return x
-      }
-      // Call 'bar' once while the inout is active.
-      bar()
-      return bar
+  ```swift
+  func foo(x : [inout] Int) -> () -> Int {
+    func bar() -> Int {
+      x += 1
+      return x
     }
+    // Call 'bar' once while the inout is active.
+    bar()
+    return bar
+  }
 
-    var x = 219
-    var f = foo(&x)
-    // x is updated to the value of foo's local x at function exit.
-    println("global x = \(x)")
-    // These calls only update the captured local 'x', which is now independent
-    // of the inout parameter.
-    println("local x = \(f())")
-    println("local x = \(f())")
-    println("local x = \(f())")
+  var x = 219
+  var f = foo(&x)
+  // x is updated to the value of foo's local x at function exit.
+  println("global x = \(x)")
+  // These calls only update the captured local 'x', which is now independent
+  // of the inout parameter.
+  println("local x = \(f())")
+  println("local x = \(f())")
+  println("local x = \(f())")
 
-    println("global x = \(x)")
-    ```
+  println("global x = \(x)")
+  ```
 
   will print:
 
-    ```
-    global x = 220
-    local x = 221
-    local x = 222
-    local x = 223
-    global x = 220
-    ```
+  ```
+  global x = 220
+  local x = 221
+  local x = 222
+  local x = 223
+  global x = 220
+  ```
 
   In no case will you end up with a dangling pointer or other unsafe construct.
 
@@ -5042,9 +5048,9 @@ Swift 2.2
 
   For example, this code
 
-    ```swift
-    object?.parent.notifyChildEvent?(object!, .didExplode)
-    ```
+  ```swift
+  object?.parent.notifyChildEvent?(object!, .didExplode)
+  ```
 
   first checks whether `object` has a value; if so, it drills to its
   parent and checks whether that object implements the `notifyChildEvent`
@@ -5053,9 +5059,9 @@ Swift 2.2
 
   This code:
 
-    ```swift
-    var titleLength = object?.title.length
-    ```
+  ```swift
+  var titleLength = object?.title.length
+  ```
 
   checks whether `object` has a value and, if so, asks for the length of
   its title.  `titleLength` will have type `Int?`, and if `object` was
@@ -5066,9 +5072,9 @@ Swift 2.2
   result is of optional type. For example, for a variable `obj` of
   type `id`, the expression
 
-    ```swift
-    obj[0]
-    ```
+  ```swift
+  obj[0]
+  ```
 
   will produce a value of type `id`, which will either contain the
   result of the message send objectAtIndexedSubscript(0) (wrapped in an
@@ -5079,12 +5085,12 @@ Swift 2.2
 * `_` can now be used not only in `var` bindings, but in assignments as well,
   to ignore elements of a tuple assignment, or to explicitly ignore values.
 
-    ```swift
-    var a = (1, 2.0, 3)
-    var x = 0, y = 0
-    _ = a           // explicitly load and discard 'a'
-    (x, _, y) = a   // assign a.0 to x and a.2 to y
-    ```
+  ```swift
+  var a = (1, 2.0, 3)
+  var x = 0, y = 0
+  _ = a           // explicitly load and discard 'a'
+  (x, _, y) = a   // assign a.0 to x and a.2 to y
+  ```
 
 2013-09-24
 ----------
@@ -5096,51 +5102,51 @@ Swift 2.2
 
 * The Optional type `T?` is now represented as an `enum`:
 
-    ```swift
-    enum Optional<T> {
-      case None
-      case Some(T)
-    }
-    ```
+  ```swift
+  enum Optional<T> {
+    case None
+    case Some(T)
+  }
+  ```
 
   This means that, in addition to the existing Optional APIs, it can be
   pattern-matched with switch:
 
-    ```swift
-    var x : X?, y : Y?
-    switch (x, y) {
-    // Both are present
-    case (.Some(var a), .Some(var b)):
-      println("both")
+  ```swift
+  var x : X?, y : Y?
+  switch (x, y) {
+  // Both are present
+  case (.Some(var a), .Some(var b)):
+    println("both")
 
-    // One is present
-    case (.Some, .None):
-    case (.None, .Some):
-      println("one")
+  // One is present
+  case (.Some, .None):
+  case (.None, .Some):
+    println("one")
 
-    // Neither is present
-    case (.None, .None):
-      println("neither")
-    }
-    ```
+  // Neither is present
+  case (.None, .None):
+    println("neither")
+  }
+  ```
 
 * Enums now allow multiple cases to be declared in a comma-separated list
   in a single `case` declaration:
 
-    ```swift
-    enum Color {
-      case Red, Green, Blue
-    }
-    ```
+  ```swift
+  enum Color {
+    case Red, Green, Blue
+  }
+  ```
 
 * The Objective-C `id` and `Class` types now support referring to
   methods declared in any class or protocol without a downcast. For
   example, given a variable `sender` of type `id`, one can refer to
   `-isEqual: with:`
 
-    ```swift
-    sender.isEqual
-    ```
+  ```swift
+  sender.isEqual
+  ```
 
   The actual object may or may not respond to `-isEqual`, so this
   expression returns result of optional type whose value is determined via a
@@ -5149,22 +5155,22 @@ Swift 2.2
 
   To safely test the optional, one can use, e.g.,
 
-    ```swift
-    var senderIsEqual = sender.isEqual
-    if senderIsEqual {
-      // this will never trigger an "unrecognized selector" failure
-      var equal = senderIsEqual!(other)
-    } else {
-      // sender does not respond to -isEqual:
-    }
-    ```
+  ```swift
+  var senderIsEqual = sender.isEqual
+  if senderIsEqual {
+    // this will never trigger an "unrecognized selector" failure
+    var equal = senderIsEqual!(other)
+  } else {
+    // sender does not respond to -isEqual:
+  }
+  ```
 
   When you *know* that the method is there, you can use postfix `!` to
   force unwrapping of the optional, e.g.,
 
-    ```swift
-    sender.isEqual!(other)
-    ```
+  ```swift
+  sender.isEqual!(other)
+  ```
 
   This will fail at runtime if in fact sender does not respond to `-isEqual:`.
   We have some additional syntactic optimizations planned for testing
@@ -5174,9 +5180,9 @@ Swift 2.2
 * Weak references now always have optional type.  If a weak variable
   has an explicit type, it must be an optional type:
 
-    ```swift
-    var [weak] x : NSObject?
-    ```
+  ```swift
+  var [weak] x : NSObject?
+  ```
 
   If the variable is not explicitly typed, its type will still be
   inferred to be an optional type.
@@ -5190,19 +5196,19 @@ Swift 2.2
   replaced with `init`, and the selector style of declaration used for
   func declarations is now supported. For example:
 
-    ```swift
-    class Y : NSObject {
-      init withInt(i : Int) string(s : String) {
-        super.init() // call superclass initializer
-      }
+  ```swift
+  class Y : NSObject {
+    init withInt(i : Int) string(s : String) {
+      super.init() // call superclass initializer
     }
-    ```
+  }
+  ```
 
   One can use this constructor to create a `Y` object with, e.g.,
 
-    ```swift
-    Y(withInt:17, string:"Hello")
-    ```
+  ```swift
+  Y(withInt:17, string:"Hello")
+  ```
 
   Additionally, the rules regarding the selector corresponding to such
   a declaration have been revised. The selector for the above
@@ -5212,13 +5218,13 @@ Swift 2.2
   Finally, Swift initializers now introduce Objective-C entry points,
   so a declaration such as:
 
-    ```swift
-    class X : NSObject {
-      init() {
-        super.init()
-      }
+  ```swift
+  class X : NSObject {
+    init() {
+      super.init()
     }
-    ```
+  }
+  ```
 
   Overrides `NSObject`'s `-init` method (which it calls first) as well
   as introducing the 'allocating' entry point so that one can create a
@@ -5233,18 +5239,18 @@ Swift 2.2
 * Generic unions with a single payload case and any number of empty cases
   are now implemented, for example:
 
-    ```swift
-    union Maybe<T> {
-      case Some(T)
-      case None
-    }
+  ```swift
+  union Maybe<T> {
+    case Some(T)
+    case None
+  }
 
-    union Tristate<T> {
-      case Initialized(T)
-      case Initializing
-      case Uninitialized
-    }
-    ```
+  union Tristate<T> {
+    case Initialized(T)
+    case Initializing
+    case Uninitialized
+  }
+  ```
 
   Generic unions with multiple payload cases are still not yet implemented.
 
@@ -5253,17 +5259,17 @@ Swift 2.2
 * The implementation now supports partial application of class and struct
   methods:
 
-    ```swift
-    (swift) class B { func foo() { println("B") } }
-    (swift) class D : B { func foo() { println("D") } }
-    (swift) var foo = B().foo
-    // foo : () -> () = <unprintable value>
-    (swift) foo()
-    B
-    (swift) foo = D().foo
-    (swift) foo()
-    D
-    ```
+  ```swift
+  (swift) class B { func foo() { println("B") } }
+  (swift) class D : B { func foo() { println("D") } }
+  (swift) var foo = B().foo
+  // foo : () -> () = <unprintable value>
+  (swift) foo()
+  B
+  (swift) foo = D().foo
+  (swift) foo()
+  D
+  ```
 
   Support for partial application of Objective-C class methods and methods in
   generic contexts is still incomplete.
@@ -5275,14 +5281,14 @@ Swift 2.2
   paths leading to a use of the variable.  This means that constructs like this
   are now allowed:
 
-    ```swift
-    var p : SomeProtocol
-    if whatever {
-      p = foo()
-    } else {
-      p = bar()
-    }
-    ```
+  ```swift
+  var p : SomeProtocol
+  if whatever {
+    p = foo()
+  } else {
+    p = bar()
+  }
+  ```
 
   where before, the compiler would reject the definition of `p` saying that it
   needed an initializer expression.
@@ -5290,10 +5296,10 @@ Swift 2.2
   Since all local variables must be initialized before use, simple things like
   this are now rejected as well:
 
-    ```swift
-    var x : Int
-    print(x)
-    ```
+  ```swift
+  var x : Int
+  print(x)
+  ```
 
   The fix is to initialize the value on all paths, or to explicitly default
   initialize the value in the declaration, e.g. with `var x = 0` or with
@@ -5315,42 +5321,42 @@ Swift 2.2
   using `case` declarations; each case may have a different set of
   types or no type:
 
-    ```swift
-    union MaybeInt {
-      case Some(Int)
-      case None
-    }
+  ```swift
+  union MaybeInt {
+    case Some(Int)
+    case None
+  }
 
-    union HTMLTag {
-      case A(href:String)
-      case IMG(src:String, alt:String)
-      case BR
-    }
-    ```
+  union HTMLTag {
+    case A(href:String)
+    case IMG(src:String, alt:String)
+    case BR
+  }
+  ```
 
   Each `case` with a type defines a static constructor function for the union
   type. `case` declarations without types become static members:
 
-    ```swift
-    var br = HTMLTag.BR
-    var a = HTMLTag.A(href:"http://www.apple.com/")
-    // 'HTMLTag' scope deduced for '.IMG' from context
-    var img : HTMLTag = .IMG(src:"http://www.apple.com/mac-pro.png",
-                             alt:"The new Mac Pro")
-    ```
+  ```swift
+  var br = HTMLTag.BR
+  var a = HTMLTag.A(href:"http://www.apple.com/")
+  // 'HTMLTag' scope deduced for '.IMG' from context
+  var img : HTMLTag = .IMG(src:"http://www.apple.com/mac-pro.png",
+                           alt:"The new Mac Pro")
+  ```
 
   Cases can be pattern-matched using `switch`:
 
-    ```swift
-    switch tag {
-    case .BR:
-      println("<br>")
-    case .IMG(var src, var alt):
-      println("<img src=\"\(escape(src))\" alt=\"\(escape(alt))\">")
-    case .A(var href):
-      println("<a href=\"\(escape(href))\">")
-    }
-    ```
+  ```swift
+  switch tag {
+  case .BR:
+    println("<br>")
+  case .IMG(var src, var alt):
+    println("<img src=\"\(escape(src))\" alt=\"\(escape(alt))\">")
+  case .A(var href):
+    println("<a href=\"\(escape(href))\">")
+  }
+  ```
 
   Due to implementation limitations, recursive unions are not yet supported.
 
@@ -5362,17 +5368,17 @@ Swift 2.2
 * Swift now supports weak references by applying the `[weak]` attribute to a
   variable declaration.
 
-    ```swift
-    (swift) var x = NSObject()
-    // x : NSObject = <NSObject: 0x7f95d5804690>
-    (swift) var [weak] w = x
-    // w : NSObject = <NSObject: 0x7f95d5804690>
-    (swift) w == nil
-    // r2 : Bool = false
-    (swift) x = NSObject()
-    (swift) w == nil
-    // r3 : Bool = true
-    ```
+  ```swift
+  (swift) var x = NSObject()
+  // x : NSObject = <NSObject: 0x7f95d5804690>
+  (swift) var [weak] w = x
+  // w : NSObject = <NSObject: 0x7f95d5804690>
+  (swift) w == nil
+  // r2 : Bool = false
+  (swift) x = NSObject()
+  (swift) w == nil
+  // r3 : Bool = true
+  ```
 
   Swift also supports a special form of weak reference, called `[unowned]`, for
   references that should never be `nil` but are required to be weak to break
@@ -5381,31 +5387,31 @@ Swift 2.2
   the loaded reference to a strong reference, so it does not need to be loaded
   and checked for nullness before use like a true `[weak]` reference.
 
-    ```swift
-    class Parent {
-      var children : Array<Child>
+  ```swift
+  class Parent {
+    var children : Array<Child>
 
-      func addChild(c:Child) {
-        c.parent = this
-        children.append(c)
-      }
+    func addChild(c:Child) {
+      c.parent = this
+      children.append(c)
     }
+  }
 
-    class Child {
-      var [unowned] parent : Parent
-    }
-    ```
+  class Child {
+    var [unowned] parent : Parent
+  }
+  ```
 
 2013-07-31
 ----------
 * Numeric literals can now use underscores as separators. For example:
 
-    ```swift
-    var billion = 1_000_000_000
-    var crore = 1_00_00_000
-    var MAXINT = 0x7FFF_FFFF_FFFF_FFFF
-    var SMALLEST_DENORM = 0x0.0000_0000_0000_1p-1022
-    ```
+  ```swift
+  var billion = 1_000_000_000
+  var crore = 1_00_00_000
+  var MAXINT = 0x7FFF_FFFF_FFFF_FFFF
+  var SMALLEST_DENORM = 0x0.0000_0000_0000_1p-1022
+  ```
 
 * Types conforming to protocols now must always declare the conformance in
   their inheritance clause.
@@ -5429,29 +5435,29 @@ Swift 2.2
 
   Example session:
 
-    ```
-    $ echo 'println("Hello World")' >hello.swift
-    $ swift hello.swift -c -g -o hello.o
-    $ ld hello.o "-dynamic" "-arch" "x86_64" "-macosx_version_min" "10.9.0" \
-         -framework Foundation lib/swift/libswift_stdlib_core.dylib \
-         lib/swift/libswift_stdlib_posix.dylib -lSystem -o hello
-    $ lldb hello
-    Current executable set to 'hello' (x86_64).
-    (lldb) b top_level_code
-    Breakpoint 1: where = hello`top_level_code + 26 at hello.swift:1, addre...
-    (lldb) r
-    Process 38592 launched: 'hello' (x86_64)
-    Process 38592 stopped
-    * thread #1: tid = 0x1599fb, 0x0000000100000f2a hello`top_level_code + ...
-        frame #0: 0x0000000100000f2a hello`top_level_code + 26 at hello.shi...
-    -> 1         println("Hello World")
-    (lldb) bt
-    * thread #1: tid = 0x1599fb, 0x0000000100000f2a hello`top_level_code + ...
-        frame #0: 0x0000000100000f2a hello`top_level_code + 26 at hello.shi...
-        frame #1: 0x0000000100000f5c hello`main + 28
-        frame #2: 0x00007fff918605fd libdyld.dylib`start + 1
-        frame #3: 0x00007fff918605fd libdyld.dylib`start + 1
-    ```
+  ```
+  $ echo 'println("Hello World")' >hello.swift
+  $ swift hello.swift -c -g -o hello.o
+  $ ld hello.o "-dynamic" "-arch" "x86_64" "-macosx_version_min" "10.9.0" \
+       -framework Foundation lib/swift/libswift_stdlib_core.dylib \
+       lib/swift/libswift_stdlib_posix.dylib -lSystem -o hello
+  $ lldb hello
+  Current executable set to 'hello' (x86_64).
+  (lldb) b top_level_code
+  Breakpoint 1: where = hello`top_level_code + 26 at hello.swift:1, addre...
+  (lldb) r
+  Process 38592 launched: 'hello' (x86_64)
+  Process 38592 stopped
+  * thread #1: tid = 0x1599fb, 0x0000000100000f2a hello`top_level_code + ...
+      frame #0: 0x0000000100000f2a hello`top_level_code + 26 at hello.shi...
+  -> 1         println("Hello World")
+  (lldb) bt
+  * thread #1: tid = 0x1599fb, 0x0000000100000f2a hello`top_level_code + ...
+      frame #0: 0x0000000100000f2a hello`top_level_code + 26 at hello.shi...
+      frame #1: 0x0000000100000f5c hello`main + 28
+      frame #2: 0x00007fff918605fd libdyld.dylib`start + 1
+      frame #3: 0x00007fff918605fd libdyld.dylib`start + 1
+  ```
 
   Also try `s`, `n`, `up`, `down`.
 
@@ -5461,32 +5467,32 @@ Swift 2.2
   multiple values with variable bindings, guard expressions, and range
   comparisons. For example:
 
-    ```swift
-    func classifyPoint(point:(Int, Int)) {
-      switch point {
-      case (0, 0):
-        println("origin")
+  ```swift
+  func classifyPoint(point:(Int, Int)) {
+    switch point {
+    case (0, 0):
+      println("origin")
 
-      case (_, 0):
-        println("on the x axis")
+    case (_, 0):
+      println("on the x axis")
 
-      case (0, _):
-        println("on the y axis")
+    case (0, _):
+      println("on the y axis")
 
-      case (var x, var y) where x == y:
-        println("on the y = x diagonal")
+    case (var x, var y) where x == y:
+      println("on the y = x diagonal")
 
-      case (var x, var y) where -x == y:
-        println("on the y = -x diagonal")
+    case (var x, var y) where -x == y:
+      println("on the y = -x diagonal")
 
-      case (-10..10, -10..10):
-        println("close to the origin")
+    case (-10..10, -10..10):
+      println("close to the origin")
 
-      case (var x, var y):
-        println("length \(sqrt(x*x + y*y))")
-      }
+    case (var x, var y):
+      println("length \(sqrt(x*x + y*y))")
     }
-    ```
+  }
+  ```
 
 2013-07-10
 ----------
@@ -5495,24 +5501,24 @@ Swift 2.2
   function type and is separated from the body by the `in`
   keyword. For example:
 
-    ```swift
-    sort(fruits) { (lhs : String, rhs : String) -> Bool in
-      return lhs > rhs
-    }
-    ```
+  ```swift
+  sort(fruits) { (lhs : String, rhs : String) -> Bool in
+    return lhs > rhs
+  }
+  ```
 
   When the types are omitted, one can also omit the parentheses, e.g.,
 
-    ```swift
-    sort(fruits) { lhs, rhs in lhs > rhs }
-    ```
+  ```swift
+  sort(fruits) { lhs, rhs in lhs > rhs }
+  ```
 
   Closures with no parameters or that use the anonymous parameters
   (`$0`, `$1`, etc.) don't need the `in`, e.g.,
 
-    ```swift
-    sort(fruits) { $0 > $1 }
-    ```
+  ```swift
+  sort(fruits) { $0 > $1 }
+  ```
 
 * `nil` can now be used without explicit casting. Previously, `nil` had
   type `NSObject`, so one would have to write (e.g.) `nil as! NSArray`
