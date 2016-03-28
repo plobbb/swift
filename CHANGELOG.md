@@ -16,12 +16,14 @@ Swift 3.0
   aligning with function call syntax.
 
 * Generic typealiases are now supported, e.g.:
-```swift
-    typealias StringDictionary<T> = Dictionary<String, T>
-    typealias IntFunction<T> = (T) -> Int
-    typealias MatchingTriple<T> = (T, T, T)
-    typealias BackwardTriple<T1,T2,T3> = (T3, T2, T1)
-```
+
+  ```swift
+  typealias StringDictionary<T> = Dictionary<String, T>
+  typealias IntFunction<T> = (T) -> Int
+  typealias MatchingTriple<T> = (T, T, T)
+  typealias BackwardTriple<T1,T2,T3> = (T3, T2, T1)
+  ```
+
   etc.
 
 * The `@noescape` attribute has been extended to be a more general type attribute.
@@ -30,12 +32,12 @@ Swift 3.0
   `@noescape` type, and use `@noescape` in `typealiases`.  For example, this is now
   valid code:
 
-```swift
-    func apply<T, U>(@noescape f: T -> U,
-                     @noescape g: (@noescape T -> U) -> U) -> U {
-      return g(f)
-    }
-```
+  ```swift
+  func apply<T, U>(@noescape f: T -> U,
+                   @noescape g: (@noescape T -> U) -> U) -> U {
+    return g(f)
+  }
+  ```
 
 * [SE-0034](https://github.com/apple/swift-evolution/blob/master/proposals/0034-disambiguating-line.md)
   has renamed the `#line` directive (which resets the logical source location
@@ -58,22 +60,23 @@ Swift 3.0
 
 * Catch blocks in `rethrows` functions may now `throw` errors. For example:
 
-    ```swift
-    func process(f: () throws -> Int) rethrows -> Int {
-        do {
-            return try f()
-        } catch is SomeError {
-            throw OtherError()
-        }
+  ```swift
+  func process(f: () throws -> Int) rethrows -> Int {
+    do {
+      return try f()
+    } catch is SomeError {
+      throw OtherError()
     }
-    ```
+  }
+  ```
+
 * Throwing closure arguments of a rethrowing function may now be optional. For example:
 
-    ```swift
-    func executeClosureIfNotNil(closure: (() throws -> Void)?) rethrows {
-        try closure?()
-    }
-    ```
+  ```swift
+  func executeClosureIfNotNil(closure: (() throws -> Void)?) rethrows {
+    try closure?()
+  }
+  ```
 
 Swift 2.2
 ---------
@@ -81,11 +84,11 @@ Swift 2.2
 * Associated types in protocols can now be specified with a new `associatedtype`
   declaration, to replace the use of `typealias`:
 
-    ```swift
-    protocol P {
-      associatedtype Ty
-    }
-    ```
+  ```swift
+  protocol P {
+    associatedtype Ty
+  }
+  ```
 
   The `typealias` keyword is still allowed (but deprecated and produces a warning)
   in Swift 2.2. This warning will become an error in Swift 3.0.
@@ -100,17 +103,17 @@ Swift 2.2
 * The implicit tuple splat behavior in function application has been deprecated
   and will be removed in Swift 3.0.  For example, this code:
 
-    ```swift
-    func foo(a : Int, b : Int) { ... }
-    let x = (1, b: 2)
-    foo(x)   // Warning, deprecated.
-    ```
+  ```swift
+  func foo(a : Int, b : Int) { ... }
+  let x = (1, b: 2)
+  foo(x)   // Warning, deprecated.
+  ```
 
   should move to being written as:
   
-    ```swift
-    foo(x.0, x.b)
-    ```
+  ```swift
+  foo(x.0, x.b)
+  ```
 
   For more information and rationale, see 
   [SE-0029](https://github.com/apple/swift-evolution/blob/master/proposals/0029-remove-implicit-tuple-splat.md).
@@ -125,10 +128,10 @@ Swift 2.2
   that starts with a dot may contain other dots in it, but operators that start
   with some other character may not contain dots.  For example:
 
-    ```swift
-    x....foo   --> "x" "...." "foo"
-    x&%^.foo   --> "x" "&%^"  ".foo"
-    ```
+  ```swift
+  x....foo   --> "x" "...." "foo"
+  x&%^.foo   --> "x" "&%^"  ".foo"
+  ```
 
   This eliminates a special case for the `..<` operator, folding it into a simple
   and consistent rule.
@@ -151,18 +154,18 @@ Swift 2.2
   return `nil` or throw an error, respectively, before the object has been
   fully initialized. For example:
 
-    ```swift
-    class Widget : Gadget {
-      let complexity: Int
+  ```swift
+  class Widget : Gadget {
+    let complexity: Int
 
-      init(complexity: Int, elegance: Int) throws {
-        if complexity > 3 { throw WidgetError.TooComplex }
-        self.complexity = complexity
+    init(complexity: Int, elegance: Int) throws {
+      if complexity > 3 { throw WidgetError.TooComplex }
+      self.complexity = complexity
 
-        try super.init(elegance: elegance)
-      }
+      try super.init(elegance: elegance)
     }
-    ```
+  }
+  ```
 
 * All slice types now have `removeFirst()` and `removeLast()` methods.
 
@@ -184,12 +187,12 @@ Swift 2.2
   from Swift. For example, given the following struct 'Pie', the 'crust'
   and 'filling' members are now imported:
 
-    ```swift
-    struct Pie {
-      struct { bool crispy; } crust;
-      union { int fruit; } filling;
-    }
-    ```
+  ```swift
+  struct Pie {
+    struct { bool crispy; } crust;
+    union { int fruit; } filling;
+  }
+  ```
 
   Since Swift does not support anonymous structs, these fields are
   imported as properties named `crust` and `filling` having nested types
@@ -200,9 +203,9 @@ Swift 2.2
 * Argument labels and parameter names can now be any keyword except
   `var`, `let`, or `inout`. For example:
 
-   ```swift
-    NSURLProtectionSpace(host: "somedomain.com", port: 443, protocol: "https", realm: "Some Domain", authenticationMethod: "Basic")
-   ```
+  ```swift
+  NSURLProtectionSpace(host: "somedomain.com", port: 443, protocol: "https", realm: "Some Domain", authenticationMethod: "Basic")
+  ```
 
   would previously have required `protocol` to be surrounded in
   back-ticks. For more information, see
@@ -224,12 +227,12 @@ Swift 2.2
 * When referencing a function or initializer, one can provide the
   complete name, including argument labels. For example:
 
-   ```swift
-      let fn1 = someView.insertSubview(_:at:)
-      let fn2 = someView.insertSubview(_:aboveSubview:)
+  ```swift
+  let fn1 = someView.insertSubview(_:at:)
+  let fn2 = someView.insertSubview(_:aboveSubview:)
 
-      let buttonFactory = UIButton.init(type:)
-   ```
+  let buttonFactory = UIButton.init(type:)
+  ```
    
   For more information, see [SE-0021](https://github.com/apple/swift-evolution/blob/master/proposals/0021-generalized-naming.md).
 
@@ -254,15 +257,15 @@ Swift 2.2
 * The Objective-C selector of a Swift method can now be determined
   directly with the #selector expression, e.g.,:
 
-   ```swift
-      let sel = #selector(insertSubview(_:aboveSubview:)) // sel has type Selector
-   ```
+  ```swift
+  let sel = #selector(insertSubview(_:aboveSubview:)) // sel has type Selector
+  ```
    
   Along with this change, the use of string literals as selectors has
   been deprecated, e.g.,
 
   ```swift
-      let sel: Selector = "insertSubview:aboveSubview:"
+  let sel: Selector = "insertSubview:aboveSubview:"
   ```
    
   Generally, such string literals should be replaced with uses of
@@ -272,7 +275,7 @@ Swift 2.2
   selectors, e.g.:
 
   ```swift
-      let sel = Selector("propertyName")
+  let sel = Selector("propertyName")
   ```
    
   Note that the compiler is now checking the string literals used to
@@ -360,12 +363,12 @@ Swift 2.2
 
   ```swift
   func xyz() throws {
-     let f = fopen("x.txt", "r")
-     defer { fclose(f) }
-     try foo(f)                    // f is closed if an error is propagated.
-     let f2 = fopen("y.txt", "r")
-     defer { fclose(f2) }
-     try bar(f, f2)                // f2 is closed, then f is closed if an error is propagated.
+    let f = fopen("x.txt", "r")
+    defer { fclose(f) }
+    try foo(f)                    // f is closed if an error is propagated.
+    let f2 = fopen("y.txt", "r")
+    defer { fclose(f2) }
+    try bar(f, f2)                // f2 is closed, then f is closed if an error is propagated.
   }                                // f2 is closed, then f is closed on a normal path
   ```
 
@@ -408,7 +411,7 @@ Swift 2.2
 
   ```swift
   enum Either<T, U> {
-     case Left(T), Right(U)
+    case Left(T), Right(U)
   }
   ```
 
@@ -541,10 +544,10 @@ Swift 2.2
 
   ```swift
   do {
-      //new scope
-      do {
-          //another scope
-      }
+    //new scope
+    do {
+      //another scope
+    }
   }
   ```
 
@@ -753,9 +756,9 @@ Swift 2.2
 
   ```swift
   enum WorldLayer : String {
-      case Ground = "Ground"
-      case BelowCharacter = "BelowCharacter"
-      case Character = "Character"
+    case Ground = "Ground"
+    case BelowCharacter = "BelowCharacter"
+    case Character = "Character"
   }
   ```
 
@@ -986,14 +989,14 @@ Swift 2.2
 
   ```swift
   // Declaration
-    func printFunction(str: String, newline: Bool)
-    func printMethod(str: String, newline: Bool)
-    func printFunctionOmitParameterName(str: String, _  newline: Bool)
+  func printFunction(str: String, newline: Bool)
+  func printMethod(str: String, newline: Bool)
+  func printFunctionOmitParameterName(str: String, _  newline: Bool)
 
   // Call
-    printFunction("hello", newline: true)
-    printMethod("hello", newline: true)
-    printFunctionOmitParameterName("hello", true)
+  printFunction("hello", newline: true)
+  printMethod("hello", newline: true)
+  printFunctionOmitParameterName("hello", true)
   ```
 
   **(17218256)**
@@ -1065,11 +1068,15 @@ Swift 2.2
 
   ```swift
   do {
-  ...
+    ...
   } while <condition>
+  ```
+
   In Swift 2.0:
+
+  ```
   repeat {
-  ...
+    ...
   } while <condition>
   ```
 
