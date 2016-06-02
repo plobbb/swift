@@ -80,7 +80,7 @@ class SubCls : MyCls, Prot {
   var protocolProperty1 = 0
   var protocolProperty2 = 0
 }
-
+// TODO: se-0081
 // CHECK: func <Func>genFn</Func><<GenericTypeParam>T</GenericTypeParam> : <Protocol@64:10>Prot</Protocol> where <GenericTypeParam@85:12>T</GenericTypeParam>.<AssociatedType@65:18>Blarg</AssociatedType> : <Protocol@71:10>Prot2</Protocol>>(_ <Param>p</Param> : <GenericTypeParam@85:12>T</GenericTypeParam>) -> <iStruct@>Int</iStruct> {}{{$}}
 func genFn<T : Prot where T.Blarg : Prot2>(_ p : T) -> Int {}
 

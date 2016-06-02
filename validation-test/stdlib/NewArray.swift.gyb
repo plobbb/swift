@@ -49,27 +49,27 @@ func checkReallocation<T : _ArrayProtocol>(
   return currentBuffer
 }
 
-func checkEqual<
-  S1 : Sequence, S2 : Sequence
-  where
+func checkEqual<S1 : Sequence, S2 : Sequence>(
+  _ a1: S1, _ a2: S2, _ expected: Bool
+) where
   S1.Iterator.Element == S2.Iterator.Element,
-  S1.Iterator.Element : Equatable
->(_ a1: S1, _ a2: S2, _ expected: Bool) {
+  S1.Iterator.Element : Equatable {
+ 
   if a1.elementsEqual(a2) != expected {
     let un = expected ? "un" : ""
     print("unexpectedly \(un)equal sequences!")
   }
 }
 
-func test<
-  T : _ArrayProtocol
-  where
+func test<T : _ArrayProtocol>(
+  _: T.Type, _ label: String
+) where
   T.Iterator.Element == T._Buffer.Element,
   T._Buffer.Element == T.Element,
   T.Element == LifetimeTracked,
   T.Index == Int,
-  T : RandomAccessCollection
->(_: T.Type, _ label: String) {
+  T : RandomAccessCollection {
+ 
   print("test: \(label)...", terminator: "")
 
   var x: T = [

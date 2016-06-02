@@ -1114,7 +1114,7 @@ func testResolveFuncParam5<FooExBarEx : FooExProtocol & BarExProtocol>(_ a: FooE
 // RESOLVE_FUNC_PARAM_5-NEXT: End completions
 }
 
-func testResolveFuncParam6<Foo : FooProtocol where Foo : FooClass>(_ foo: Foo) {
+func testResolveFuncParam6<Foo : FooProtocol>(_ foo: Foo) where Foo : FooClass {
   foo.#^RESOLVE_FUNC_PARAM_6^#
 // RESOLVE_FUNC_PARAM_6: Begin completions
 // RESOLVE_FUNC_PARAM_6-NEXT: Decl[InstanceVar]/Super:    fooInstanceVar1[#Int#]{{; name=.+$}}
@@ -1628,7 +1628,7 @@ func testConstrainedConcrete2(_ x: Generic1<WillConformP1>) {
 func testConstrainedGeneric1<S: P1>(x: Generic1<S>) {
   x.#^PROTOCOL_EXT_CONSTRAINED_GENERIC_1^#
 }
-func testConstrainedGeneric2<S: P4 where S.T : P1>(x: S) {
+func testConstrainedGeneric2<S: P4>(x: S) where S.T : P1 {
   x.#^PROTOCOL_EXT_CONSTRAINED_GENERIC_2^#
 }
 extension Concrete1 {
@@ -1655,10 +1655,10 @@ func testConstrainedConcrete3_sub(_ x: Concrete2) {
 func testConstrainedConcrete4(_ x: Generic2<OnlyMe>) {
   x.#^PROTOCOL_EXT_CONCRETE4^#
 }
-func testConstrainedGeneric1<S: P4 where S.T == OnlyMe>(x: S) {
+func testConstrainedGeneric1<S: P4>(x: S) where S.T == OnlyMe {
   x.#^PROTOCOL_EXT_CONSTRAINED_GENERIC_3^#
 }
-func testConstrainedGeneric1_sub<S: P4 where S.T == OnlyMe>(x: S) {
+func testConstrainedGeneric1_sub<S: P4>(x: S) where S.T == OnlyMe {
   x#^PROTOCOL_EXT_CONSTRAINED_GENERIC_3_SUB^#
 }
 extension Concrete2 {
@@ -1684,7 +1684,7 @@ extension Concrete2 {
 func testTypealias1() {
   Concrete1.#^PROTOCOL_EXT_TA_1^#
 }
-func testTypealias1<S: P4 where S.T == WillConformP1>() {
+func testTypealias1<S: P4>() where S.T == WillConformP1 {
   S.#^PROTOCOL_EXT_TA_2^#
 }
 // PROTOCOL_EXT_TA: Begin completions
@@ -1694,7 +1694,7 @@ func testTypealias1<S: P4 where S.T == WillConformP1>() {
 func testProtExtInit1() {
   Concrete1(#^PROTOCOL_EXT_INIT_1^#
 }
-func testProtExtInit2<S: P4 where S.T : P1>() {
+func testProtExtInit2<S: P4>() where S.T : P1 {
   S(#^PROTOCOL_EXT_INIT_2^#
 }
 
@@ -1785,7 +1785,7 @@ func testDeDuped2(_ x: dedupP) {
 // PROTOCOL_EXT_DEDUP_2: Decl[Subscript]/CurrNominal:        [{#Self.T#}][#Self.T#]; name=[Self.T]
 // PROTOCOL_EXT_DEDUP_2: End completions
 }
-func testDeDuped3<T : dedupP where T.T == Int>(_ x: T) {
+func testDeDuped3<T : dedupP>(_ x: T) where T.T == Int {
   x#^PROTOCOL_EXT_DEDUP_3^#
 // PROTOCOL_EXT_DEDUP_3: Begin completions, 3 items
 // PROTOCOL_EXT_DEDUP_3: Decl[InstanceMethod]/Super:   .foo()[#Self.T#]; name=foo()

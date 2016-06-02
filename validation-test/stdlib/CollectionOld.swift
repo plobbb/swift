@@ -15,9 +15,9 @@ var CollectionTests = TestSuite("CollectionTests")
 /// permuted order.
 public struct PermutationGenerator<
   C: Collection, Indices: Sequence
-  where
-  C.Index == Indices.Iterator.Element
-> : IteratorProtocol, Sequence {
+> : IteratorProtocol, Sequence
+  where C.Index == Indices.Iterator.Element {
+
   var seq : C
   var indices : Indices.Iterator
 
@@ -62,12 +62,11 @@ for a in PermutationGenerator(elements: foobar, indices: r) {
 }
 print("")
 
-func isPalindrome0<
-  S : BidirectionalCollection
+func isPalindrome0<S : BidirectionalCollection>(_ seq: S) -> Bool
   where
   S.Iterator.Element : Equatable,
-  S.Indices.Iterator.Element == S.Index
->(_ seq: S) -> Bool {
+  S.Indices.Iterator.Element == S.Index {
+
   typealias Index = S.Index
 
   let a = seq.indices
@@ -87,12 +86,10 @@ print(isPalindrome0(MinimalBidirectionalCollection(elements: "GoHangaSalamiImaLa
 // CHECK: true
 print(isPalindrome0(MinimalBidirectionalCollection(elements: "GoHangaSalamiimalaSagnaHoG".characters)))
 
-func isPalindrome1<
-  S : BidirectionalCollection
+func isPalindrome1<S : BidirectionalCollection>(_ seq: S) -> Bool
   where
   S.Iterator.Element : Equatable,
-  S.Indices.Iterator.Element == S.Index
->(_ seq: S) -> Bool {
+  S.Indices.Iterator.Element == S.Index {
 
   let a = PermutationGenerator(elements: seq, indices: seq.indices)
   var b = seq.lazy.reversed().makeIterator()
@@ -104,12 +101,10 @@ func isPalindrome1<
   return true
 }
 
-func isPalindrome1_5<
-  S: BidirectionalCollection
+func isPalindrome1_5<S: BidirectionalCollection>(_ seq: S) -> Bool
   where
   S.Iterator.Element == S.Iterator.Element,
-  S.Iterator.Element: Equatable
->(_ seq: S) -> Bool {
+  S.Iterator.Element: Equatable {
 
   var b = seq.lazy.reversed().makeIterator()
   for nextChar in seq {
@@ -132,11 +127,9 @@ print(isPalindrome1_5(MinimalBidirectionalCollection(elements: "FleetoMeReMoteel
 
 // Finally, one that actually uses indexing to do half as much work.
 // BidirectionalCollection traversal finally pays off!
-func isPalindrome2<
-  S: BidirectionalCollection
+func isPalindrome2<S: BidirectionalCollection>(_ seq: S) -> Bool
   where
-  S.Iterator.Element: Equatable
->(_ seq: S) -> Bool {
+  S.Iterator.Element: Equatable {
 
   var b = seq.startIndex, e = seq.endIndex
 
@@ -165,12 +158,11 @@ print(isPalindrome2(MinimalBidirectionalCollection(elements: "ZerimarORamireZ".c
 // CHECK: true
 print(isPalindrome2(MinimalBidirectionalCollection(elements: "Zerimar-O-ramireZ".characters)))
 
-func isPalindrome4<
-  S: BidirectionalCollection
+func isPalindrome4<S: BidirectionalCollection>(_ seq: S) -> Bool
   where
   S.Iterator.Element : Equatable,
-  S.Indices.Iterator.Element == S.Index
->(_ seq: S) -> Bool {
+  S.Indices.Iterator.Element == S.Index {
+
   typealias Index = S.Index
 
   let a = PermutationGenerator(elements: seq, indices: seq.indices)

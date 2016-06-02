@@ -640,9 +640,10 @@ CollectionTypeTests.test("index(of:)/WhereElementIsEquatable/dispatch") {
 // FIXME: underscores are a workaround for:
 // <rdar://problem/20582358> Commenting out one line determines whether a
 // completely different line type-checks
-func callGenericFind_<
-  C : Collection where C.Iterator.Element : Equatable
->(_ collection: C, _ element: C.Iterator.Element) -> C.Index? {
+func callGenericFind_<C : Collection>(
+  _ collection: C, _ element: C.Iterator.Element
+) -> C.Index?
+  where C.Iterator.Element : Equatable {
   return collection.index(of: element)
 }
 

@@ -25,6 +25,7 @@ class EqualConstraints : NeedsGenericMethods {
   func twoArgsOneVar<U>(x: U, y: U) {}
   func twoArgsTwoVars<V, U>(x: U, y: V) {}
 }
+// TODO: se-0081 - diagnostics
 func •<T : Fungible>(x: EqualConstraints, y: T) {} // expected-note {{candidate has non-matching type '<T where T : Fungible> (EqualConstraints, T) -> ()'}}
 
 class LooseConstraints : NeedsGenericMethods {

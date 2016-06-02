@@ -623,9 +623,9 @@ struct d0200_EscapedIdentifiers {
 // PASS_COMMON-NEXT: {{^}}    {{(override )?}}init(){{$}}
 // PASS_COMMON-NEXT: {{^}}  }{{$}}
 
-  func `func`<`let`: `protocol`, `where` where `where` : `protocol`>(
-      class: Int, struct: `protocol`, foo: `let`, bar: `where`) {}
-// PASS_COMMON-NEXT: {{^}}  func `func`<`let` : `protocol`, `where` where `where` : `protocol`>(class: Int, struct: `protocol`, foo: `let`, bar: `where`){{$}}
+  func `func`<`let`: `protocol`, `where`>(
+      class: Int, struct: `protocol`, foo: `let`, bar: `where`) where `where` : `protocol` {}
+// PASS_COMMON-NEXT: {{^}}  func `func`<`let` : `protocol`, `where`>(class: Int, struct: `protocol`, foo: `let`, bar: `where`) where `where` : `protocol`{{$}}
 
   var `var`: `struct` = `struct`()
 // PASS_COMMON-NEXT: {{^}}  var `var`: {{(d0200_EscapedIdentifiers.)?}}`struct`{{$}}
@@ -1217,8 +1217,8 @@ struct GenericParams1<
 // PASS_ONE_LINE_TYPEREPR-DAG: {{^}}  func genericParams1<GenericFoo : FooProtocol, GenericFooX : FooClass, GenericBar : FooProtocol & BarProtocol, GenericBaz>(a: StructGenericFoo, b: StructGenericBar, c: StructGenericBaz, d: GenericFoo, e: GenericFooX, f: GenericBar, g: GenericBaz){{$}}
 }
 
-struct GenericParams2<T : FooProtocol where T : BarProtocol> {}
-// PASS_ONE_LINE-DAG: {{^}}struct GenericParams2<T : FooProtocol where T : BarProtocol> {{{$}}
+struct GenericParams2<T : FooProtocol> where T : BarProtocol {}
+// PASS_ONE_LINE-DAG: {{^}}struct GenericParams2<T : FooProtocol> where T : BarProtocol {{{$}}
 
 struct GenericParams3<T : FooProtocol where T : BarProtocol, T : QuxProtocol> {}
 // PASS_ONE_LINE-DAG: {{^}}struct GenericParams3<T : FooProtocol where T : BarProtocol, T : QuxProtocol> {{{$}}

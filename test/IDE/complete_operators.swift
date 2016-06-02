@@ -120,12 +120,12 @@ protocol P {
   func foo() -> T
 }
 
-func testPostfix9<G: P where G.T == Int>(x: G) {
+func testPostfix9<G: P>(x: G) where G.T == Int {
   x.foo()#^POSTFIX_9^#
 }
 // POSTFIX_9: Decl[PostfixOperatorFunction]/CurrModule: ***[#Int#]
 
-func testPostfix10<G: P where G.T : Fooable>(x: G) {
+func testPostfix10<G: P>(x: G) where G.T : Fooable {
   x.foo()#^POSTFIX_10^#
 }
 // POSTFIX_10: Decl[PostfixOperatorFunction]/CurrModule: ***[#G.T#]
@@ -195,7 +195,7 @@ func testInfix5() {
   (S2() + S2())#^INFIX_5^#
 }
 
-func testInfix6<T: P where T.T == S2>(x: T) {
+func testInfix6<T: P>(x: T) where T.T == S2 {
   x.foo()#^INFIX_6^#
 }
 
@@ -231,12 +231,12 @@ infix operator **** {
 }
 func ****<T: Fooable>(x: T, y: T) -> T { return x }
 
-func testInfix9<T: P where T.T: Fooable>(x: T) {
+func testInfix9<T: P>(x: T) where T.T: Fooable {
   x.foo()#^INFIX_9^#
 }
 // FOOABLE_INFIX: Decl[InfixOperatorFunction]/CurrModule:   **** {#T.T#}[#T.T#]
 
-func testInfix10<T: P where T.T: Fooable>(x: T) {
+func testInfix10<T: P>(x: T) where T.T: Fooable {
   (x.foo() **** x.foo())#^INFIX_10^#
 }
 
@@ -253,10 +253,10 @@ func testInfix13() {
 func testInfix14() {
   P.T#^INFIX_14^#
 }
-func testInfix15<T: P where T.T == S2>() {
+func testInfix15<T: P>() where T.T == S2 {
   T#^INFIX_15^#
 }
-func testInfix16<T: P where T.T == S2>() {
+func testInfix16<T: P>() where T.T == S2 {
   T.foo#^INFIX_16^#
 }
 func testInfix17(x: Void) {

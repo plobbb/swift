@@ -5,10 +5,12 @@ import StdlibUnittest
 
 var SubstringTests = TestSuite("SubstringTests")
 
-func checkMatch<S: Collection, T: Collection
-  where S.Index == T.Index, S.Iterator.Element == T.Iterator.Element,
-  S.Iterator.Element: Equatable>(
-  _ x: S, _ y: T, _ i: S.Index) {
+func checkMatch<S: Collection, T: Collection>(
+  _ x: S, _ y: T, _ i: S.Index
+) where
+  S.Index == T.Index,
+  S.Iterator.Element == T.Iterator.Element,
+  S.Iterator.Element: Equatable {
   
   expectEqual(x[i], y[i])
 }

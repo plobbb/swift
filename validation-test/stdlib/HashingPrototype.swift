@@ -96,11 +96,8 @@ protocol Hasher {
 
   // This handles arrays, UnsafeBufferPointer, user-defined
   // collections.
-  mutating func combineSequence<
-    S : Sequence
-    where
-    S.Iterator.Element : NewHashable
-  >(_ s: S)
+  mutating func combineSequence<S : Sequence>(_ s: S)
+    where S.Iterator.Element : NewHashable
 
   mutating func combine<H : NewHashable>(_ value: H)
 }
@@ -125,11 +122,9 @@ struct InProcessHashtableHasher : Hasher {
     _state = _state ^ Int(value.bitPattern)
   }
 
-  mutating func combineSequence<
-    S : Sequence
-    where
-    S.Iterator.Element : NewHashable
-  >(_ s: S) {
+  mutating func combineSequence<S : Sequence>(_ s: S)
+    where S.Iterator.Element : NewHashable {
+
     for v in s {
       v.combineIntoHash(&self)
     }

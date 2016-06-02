@@ -99,7 +99,7 @@ func protocolExtCollection1b(_ a: Collection) {
 // PRIVATE_NOMINAL_MEMBERS_2: End completions
 // NEGATIVE_PRIVATE_NOMINAL_MEMBERS_2-NOT: Decl{{.*}}: last
 
-func protocolExtCollection2<C : Collection where C.Index : BidirectionalIndex>(_ a: C) {
+func protocolExtCollection2<C : Collection>(_ a: C) where C.Index : BidirectionalIndex {
   a.#^PRIVATE_NOMINAL_MEMBERS_3^#
 }
 

@@ -66,7 +66,7 @@ protocol FastRuncible {
 // information for archetypes from all paths to that archetype, not just
 // its parent relationships.
 
-func testFastRuncible<T: Runcible, U: FastRuncible where T.RuncerType == U.RuncerType>(_ t: T, u: U) {
+func testFastRuncible<T: Runcible, U: FastRuncible>(_ t: T, u: U) where T.RuncerType == U.RuncerType {
   U.RuncerType.Runcee.accelerate()
 }
 // CHECK: define hidden void @_TF16associated_types16testFastRuncibleu0_RxS_8Runcible_S_12FastRunciblewx10RuncerTypezw_10RuncerTyperFTx1uq__T_(%swift.opaque* noalias nocapture, %swift.opaque* noalias nocapture, %swift.type* %T, %swift.type* %U, i8** %T.Runcible, i8** %U.FastRuncible)

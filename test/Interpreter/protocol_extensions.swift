@@ -81,9 +81,9 @@ extension MutableCollection
 }
 
 extension RangeReplaceableCollection {
-  public final func myJoin<S : Sequence where S.Iterator.Element == Self>(
-    _ elements: S
-  ) -> Self {
+  public final func myJoin<S : Sequence>(_ elements: S) -> Self
+    where S.Iterator.Element == Self {
+
     var result = Self()
     var iter = elements.makeIterator()
     if let first = iter.next() {

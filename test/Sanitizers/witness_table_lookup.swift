@@ -29,7 +29,7 @@ protocol P {
 struct B<T : Q> : Q, Q2 {
   static func foo() { consume(self.dynamicType) }
 }
-struct A<T : Q where T : Q2> : P {
+struct A<T : Q> : P where T : Q2 {
   typealias E = B<T>
   let value: T
 }
