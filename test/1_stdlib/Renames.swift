@@ -281,14 +281,12 @@ func _Map<C : Collection>(c: C) {
 }
 
 func _MemoryLayout<T>(t: T) {
-  /*
-  _ = sizeof(T.self) // TODO-error {{'sizeof' is unavailable: use MemoryLayout<T>.size instead.}} {{7-14=MemoryLayout<}} {{15-21=>.size}} {{none}}
-  _ = alignof(T.self) // TODO-error {{'alignof' is unavailable: use MemoryLayout<T>.alignment instead.}} {{7-15=MemoryLayout<}} {{16-22=>.alignment}} {{none}}
-  _ = strideof(T.self) // TODO-error {{'strideof' is unavailable: use MemoryLayout<T>.stride instead.}} {{7-16=MemoryLayout<}} {{17-23=>.stride}} {{none}}
-  _ = sizeofValue(t) // TODO-error {{'sizeofValue' is unavailable: use MemoryLayout.of(value).size instead.}} {{7-19=MemoryLayout.of(}} {{20-21=).size}} {{none}}
-  _ = alignofValue(t) // TODO-error {{'alignofValue' is unavailable: use MemoryLayout.of(value).alignment instead.}} {{7-20=MemoryLayout.of(}} {{21-22=).alignment}} {{none}}
-  _ = strideofValue(t) // TODO-error {{'strideofValue' is unavailable: use MemoryLayout.of(value).stride instead.}} {{7-21=MemoryLayout.of(}} {{22-23=).stride}} {{none}}
-  */
+  _ = sizeof(T.self) // expected-error {{'sizeof' is unavailable: use MemoryLayout<T>.size instead.}} {{7-14=MemoryLayout<}} {{15-21=>.size}} {{none}}
+  _ = alignof(T.self) // expected-error {{'alignof' is unavailable: use MemoryLayout<T>.alignment instead.}} {{7-15=MemoryLayout<}} {{16-22=>.alignment}} {{none}}
+  _ = strideof(T.self) // expected-error {{'strideof' is unavailable: use MemoryLayout<T>.stride instead.}} {{7-16=MemoryLayout<}} {{17-23=>.stride}} {{none}}
+  _ = sizeofValue(t) // expected-error {{'sizeofValue' is unavailable: use MemoryLayout.of(value).size instead.}} {{7-19=MemoryLayout.of(}} {{20-21=).size}} {{none}}
+  _ = alignofValue(t) // expected-error {{'alignofValue' is unavailable: use MemoryLayout.of(value).alignment instead.}} {{7-20=MemoryLayout.of(}} {{21-22=).alignment}} {{none}}
+  _ = strideofValue(t) // expected-error {{'strideofValue' is unavailable: use MemoryLayout.of(value).stride instead.}} {{7-21=MemoryLayout.of(}} {{22-23=).stride}} {{none}}
 }
 
 func _Mirror() {
