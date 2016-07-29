@@ -46,3 +46,37 @@ extension MemoryLayout {
     return MemoryLayout.init(candidate).dynamicType
   }
 }
+
+//===----------------------------------------------------------------------===//
+// Unavailables
+//===----------------------------------------------------------------------===//
+
+@available(*, unavailable, message: "use MemoryLayout<T>.size instead.")
+public func sizeof<T>(_:T.Type) -> Int {
+  Builtin.unreachable()
+}
+
+@available(*, unavailable, message: "use MemoryLayout.of(value).size instead.")
+public func sizeofValue<T>(_:T) -> Int {
+  Builtin.unreachable()
+}
+
+@available(*, unavailable, message: "use MemoryLayout<T>.alignment instead.")
+public func alignof<T>(_:T.Type) -> Int {
+  Builtin.unreachable()
+}
+
+@available(*, unavailable, message: "use MemoryLayout.of(value).alignment instead.")
+public func alignofValue<T>(_:T) -> Int {
+  Builtin.unreachable()
+}
+
+@available(*, unavailable, message: "use MemoryLayout<T>.stride instead.")
+public func strideof<T>(_:T.Type) -> Int {
+  Builtin.unreachable()
+}
+
+@available(*, unavailable, message: "use MemoryLayout.of(value).stride instead.")
+public func strideofValue<T>(_:T) -> Int {
+  Builtin.unreachable()
+}

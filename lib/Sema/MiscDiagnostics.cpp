@@ -25,6 +25,7 @@
 #include "swift/Parse/Lexer.h"
 #include "swift/Parse/Parser.h"
 #include "llvm/ADT/MapVector.h"
+#include "llvm/ADT/StringSwitch.h"
 #include "llvm/Support/SaveAndRestore.h"
 using namespace swift;
 
@@ -1809,6 +1810,9 @@ private:
                         const ApplyExpr *call = nullptr);
   bool diagnoseIncDecRemoval(const ValueDecl *D, SourceRange R,
                              const AvailableAttr *Attr);
+  bool diagnoseMemoryLayoutMigration(const ValueDecl *D, SourceRange R,
+                                     const AvailableAttr *Attr,
+                                     const ApplyExpr *call);
 
   /// Walks up from a potential callee to the enclosing ApplyExpr.
   const ApplyExpr *getEnclosingApplyExpr() const {
@@ -1947,9 +1951,12 @@ bool AvailabilityWalker::diagAvailability(const ValueDecl *D, SourceRange R,
   if (!D)
     return false;
 
-  if (auto *attr = AvailableAttr::isUnavailable(D))
+  if (auto *attr = AvailableAttr::isUnavailable(D)) {
     if (diagnoseIncDecRemoval(D, R, attr))
       return true;
+    if (call && diagnoseMemoryLayoutMigration(D, R, attr, call))
+      return true;
+  }
 
   if (TC.diagnoseExplicitUnavailability(D, R, DC, call))
     return true;
@@ -2049,7 +2056,63 @@ bool AvailabilityWalker::diagnoseIncDecRemoval(const ValueDecl *D,
   return false;
 }
 
+/// If this is a call to an unavailable sizeof family functions, diagnose it
+/// with a fixit hint and return true. If not, or if we fail, return false.
+bool AvailabilityWalker::diagnoseMemoryLayoutMigration(const ValueDecl *D,
+                                               SourceRange R,
+                                               const AvailableAttr *Attr,
+                                               const ApplyExpr *call) {
 
+  if (!D->getModuleContext()->isStdlibModule())
+    return false;
+
+  std::pair<StringRef, bool> KindValue
+    = llvm::StringSwitch<std::pair<StringRef, bool>>(D->getNameStr())
+      .Case("sizeof", {"size", false})
+      .Case("alignof", {"alignment", false})
+      .Case("strideof", {"stride", false})
+      .Case("sizeofValue", {"size", true})
+      .Case("alignofValue", {"alignment", true})
+      .Case("strideofValue", {"stride", true})
+      .Default({});
+
+  if (KindValue.first.empty())
+    return false;
+
+  auto Kind = KindValue.first;
+  auto isValue = KindValue.second;
+
+  auto args = dyn_cast<ParenExpr>(call->getArg());
+  if (!args)
+    return false;
+
+  SourceRange PrefixRange(call->getStartLoc(), args->getLParenLoc());
+  SourceRange SuffixRange(args->getRParenLoc());
+  StringRef Prefix;
+  StringRef Suffix;
+
+  if (isValue) {
+    Prefix = "MemoryLayout.of(";
+    Suffix = ").";
+  } else {
+    Prefix = "MemoryLayout<";
+    Suffix = ">.";
+
+    // We must truncate `.self`.
+    // E.g. sizeof(T.self) => MemoryLayout<T>.size
+    if(auto *DSE = dyn_cast<DotSelfExpr>(args->getSubExpr()))
+      SuffixRange.Start = DSE->getDotLoc();
+  }
+
+  EncodedDiagnosticMessage EncodedMessage(Attr->Message);
+  TC.diagnose(R.Start, diag::availability_decl_unavailable_msg,
+              D->getFullName(), EncodedMessage.Message)
+    .highlight(R)
+    .fixItReplace(PrefixRange, Prefix)
+    .fixItReplace(SuffixRange, (Suffix + Kind).str());
+
+  return true;
+}
 
 /// Diagnose uses of unavailable declarations.
 static void diagAvailability(TypeChecker &TC, const Expr *E,
