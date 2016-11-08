@@ -160,6 +160,7 @@ ParserResult<TypeRepr> Parser::parseType() {
 ///
 ///   type-function:
 ///     type-composition '->' type
+///     type-composition 'throws' '->' type
 ///
 ParserResult<TypeRepr> Parser::parseType(Diag<> MessageID,
                                          bool HandleCodeCompletion) {
@@ -182,59 +183,46 @@ ParserResult<TypeRepr> Parser::parseType(Diag<> MessageID,
   if (ty.isNull())
     return nullptr;
 
-  // Parse a throws specifier.  'throw' is probably a typo for 'throws',
-  // but in local contexts we could just be at the end of a statement,
-  // so we need to check for the arrow.
-  ParserPosition beforeThrowsPos;
+  // Parse a throws specifier.
+  // Don't consume 'throws', if next token is not '->', so we can emit a more
+  // useful diagnostic when parsing a function decl.
   SourceLoc throwsLoc;
-  bool rethrows = false;
-  if (Tok.isAny(tok::kw_throws, tok::kw_rethrows) ||
-      (Tok.is(tok::kw_throw) && peekToken().is(tok::arrow))) {
-    if (Tok.is(tok::kw_throw)) {
+  if (Tok.isAny(tok::kw_throws, tok::kw_rethrows, tok::kw_throw) &&
+      peekToken().is(tok::arrow)) {
+    if (Tok.is(tok::kw_rethrows)) {
+      // 'rethrows' is only allowed on function declarations for now.
+      diagnose(Tok.getLoc(), diag::rethrowing_function_type);
+    } else if (Tok.is(tok::kw_throw)) {
+      // 'throw' is probably a typo for 'throws'
       diagnose(Tok.getLoc(), diag::throw_in_function_type)
         .fixItReplace(Tok.getLoc(), "throws");
     }
-
-    beforeThrowsPos = getParserPosition();
-    rethrows = Tok.is(tok::kw_rethrows);
     throwsLoc = consumeToken();
   }
 
-  // Handle type-function if we have an arrow.
-  SourceLoc arrowLoc;
-  if (consumeIf(tok::arrow, arrowLoc)) {
-    ParserResult<TypeRepr> SecondHalf =
-      parseType(diag::expected_type_function_result);
-    if (SecondHalf.hasCodeCompletion())
-      return makeParserCodeCompletionResult<TypeRepr>();
-    if (SecondHalf.isNull())
-      return nullptr;
-    if (rethrows) {
-      // 'rethrows' is only allowed on function declarations for now.
-      diagnose(throwsLoc, diag::rethrowing_function_type);
+  if (Tok.isNot(tok::arrow)) {
+    if (generics) {
+      // Only function types may be generic.
+      auto brackets = generics->getSourceRange();
+      diagnose(brackets.Start, diag::generic_non_function);
     }
-    auto fnTy = new (Context) FunctionTypeRepr(generics, ty.get(),
-                                               throwsLoc,
-                                               arrowLoc,
-                                               SecondHalf.get());
-    return makeParserResult(applyAttributeToType(fnTy, attrs));
-  } else if (throwsLoc.isValid()) {
-    // Don't consume 'throws', so we can emit a more useful diagnostic when
-    // parsing a function decl.
-    restoreParserPosition(beforeThrowsPos);
-    return ty;
-  }
-  
-  // Only function types may be generic.
-  if (generics) {
-    auto brackets = generics->getSourceRange();
-    diagnose(brackets.Start, diag::generic_non_function);
+
+    return makeParserResult(applyAttributeToType(ty.get(), attrs));
   }
 
-  if (ty.isNonNull() && !ty.hasCodeCompletion()) {
-    ty = makeParserResult(applyAttributeToType(ty.get(), attrs));
-  }
-  return ty;
+  // Handle type-function if we have an arrow.
+  SourceLoc arrowLoc = consumeToken(tok::arrow);
+  ParserResult<TypeRepr> SecondHalf =
+    parseType(diag::expected_type_function_result);
+  if (SecondHalf.hasCodeCompletion())
+    return makeParserCodeCompletionResult<TypeRepr>();
+  if (SecondHalf.isNull())
+    return nullptr;
+  auto fnTy = new (Context) FunctionTypeRepr(generics, ty.get(),
+                                              throwsLoc,
+                                              arrowLoc,
+                                              SecondHalf.get());
+  return makeParserResult(applyAttributeToType(fnTy, attrs));
 }
 
 ParserResult<TypeRepr> Parser::parseTypeForInheritance(
